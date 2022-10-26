@@ -4,6 +4,7 @@ import com.example.backend.domain.Tost;
 import com.example.backend.dto.TostDto;
 import com.example.backend.mapper.TostMapper;
 import com.example.backend.repository.TostRepository;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,9 +23,11 @@ public class TostServiceImpl implements TostService {
     @Override
     @Transactional(readOnly = true)
     public List<TostDto> getList(UUID userId) {
-        return tostRepository.findAllByUserIdOrCommonTrue(userId).stream()
+        List<TostDto> result = tostRepository.findAllByUserIdOrCommonTrue(userId).stream()
             .map(TostMapper.INSTANCE::map)
             .collect(Collectors.toList());
+        Collections.shuffle(result);
+        return result;
     }
 
     @Override
