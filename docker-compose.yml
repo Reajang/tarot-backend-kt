@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  postgres:
+    build:
+      context: infra/postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_PASSWORD: postgres
+      TZ: Europe/Moscow
+    healthcheck:
+      interval: 10s
+      retries: 10
+      start_period: 45s
+      test: pg_isready -U postgres && nc -z localhost 5432
+      timeout: 10s
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data:rw
+volumes:
+  pgdata: { }
