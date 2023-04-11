@@ -15,9 +15,48 @@ services:
       test: pg_isready -U postgres && nc -z localhost 5432
       timeout: 10s
     ports:
-      - 5432:5432
+      - "5432:5432"
     restart: unless-stopped
     volumes:
       - pgdata:/var/lib/postgresql/data:rw
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      spring.datasource.url: jdbc:postgresql://postgres:5432/astana
+      spring.flyway.url: jdbc:postgresql://postgres:5432/astana
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+#  ui:
+#    build:
+#      context: ../ui/astana-ui
+#    dockerfile: docker/Dockerfile
+#    environment:
+#      BACKEND_UPSTREAM: host.docker.internal:8080
+#    ports:
+#      - 80:80
+#    restart: unless-stopped
+#    extra_hosts:
+#      - "host.docker.internal:172.17.0.1"
+#  nginx-proxy:
+#    depends_on:
+#      - nginx
+#    image: nexus01.kno.dks.lanit.ru:8083/kno/docker-images/master/local-proxy:latest
+#    environment:
+#      SERVER: my.dev.kno.dks.lanit.ru
+#      FRONT: nginx:80
+#    volumes:
+#      - ./signing/certs:/etc/nginx/ssl
+#    ports:
+#      - 443:443
+#    restart: unless-stopped
 volumes:
   pgdata: { }
