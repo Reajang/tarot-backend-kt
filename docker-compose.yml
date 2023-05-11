@@ -2,9 +2,10 @@ version: '3.7'
 
 services:
   postgres:
-    build:
-      context: infra/postgres
-      dockerfile: Dockerfile
+    image: leonidgarin/astana-postgres:v2.0.0
+#    build:
+#      context: infra/postgres
+#      dockerfile: Dockerfile
     environment:
       POSTGRES_PASSWORD: postgres
       TZ: Europe/Moscow
@@ -21,9 +22,10 @@ services:
       - pgdata:/var/lib/postgresql/data:rw
 
   backend:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
+    image: leonidgarin/astana-backend:v2.0.0
+#    build:
+#      context: .
+#      dockerfile: docker/Dockerfile
     environment:
       spring.datasource.url: jdbc:postgresql://postgres:5432/astana
       spring.flyway.url: jdbc:postgresql://postgres:5432/astana
@@ -36,9 +38,10 @@ services:
         condition: service_healthy
 
   ui:
-    build:
-      context: ../ui/astana-ui
-      dockerfile: docker/Dockerfile
+    image: leonidgarin/astana-ui:v2.0.0
+#    build:
+#      context: ../ui/astana-ui
+#      dockerfile: docker/Dockerfile
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
     environment:
