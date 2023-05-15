@@ -2,10 +2,10 @@ version: '3.7'
 
 services:
   postgres:
-    image: leonidgarin/astana-postgres:v2.0.0
-#    build:
-#      context: infra/postgres
-#      dockerfile: Dockerfile
+#    image: leonidgarin/astana-postgres:v2.0.0
+    build:
+      context: infra/postgres
+      dockerfile: Dockerfile
     environment:
       POSTGRES_PASSWORD: postgres
       TZ: Europe/Moscow
