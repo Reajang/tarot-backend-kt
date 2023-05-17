@@ -5,6 +5,8 @@ import com.example.backend.dto.TarotCardDto;
 import com.example.backend.dto.TarotRequest;
 import com.example.backend.dto.TarotResponse;
 import com.example.backend.helpers.ChatGPTHelper;
+import com.example.backend.helpers.Language;
+import com.example.backend.helpers.YandexTranslateHelper;
 import com.example.backend.mapper.TarotCardMapper;
 import com.example.backend.repository.TarotCardRepository;
 import java.util.List;
@@ -21,6 +23,7 @@ public class TarotServiceChatGPTImpl implements TarotService {
 
     private final TarotCardRepository repository;
     private final ChatGPTHelper chatGPTHelper;
+    private final YandexTranslateHelper yandexTranslateHelper;
 
     private final Random randomizer = new Random(31);
 
@@ -35,7 +38,21 @@ public class TarotServiceChatGPTImpl implements TarotService {
 
     @Override
     public TarotResponse ask(TarotRequest request) throws Exception {
-        return chatGPTHelper.tarotMeChatGPT(request);
+        TarotRequest translatedInEngRequest;
+        if (request.from() != Language.EN) {
+            String questionInEnglish = yandexTranslateHelper.translate(request.text(), request.from(), request.to());
+            translatedInEngRequest = new TarotRequest(request.cards(), questionInEnglish, request.from(), request.to());
+        } else {
+            translatedInEngRequest = request;
+        }
+
+        TarotResponse tarotResponse = chatGPTHelper.tarotMeChatGPT(translatedInEngRequest);
+
+        if (request.from() != Language.EN) {
+            String responseInEnglish = yandexTranslateHelper.translate(tarotResponse.text(), request.to(), request.from());
+            return new TarotResponse(tarotResponse.cards(), responseInEnglish, request.to(), request.from());
+        }
+        return tarotResponse;
     }
 
     @Override

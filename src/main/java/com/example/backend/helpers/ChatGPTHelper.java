@@ -12,10 +12,12 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ChatGPTHelper {
 
     @Value("${gpt.api.url}")
@@ -29,6 +31,8 @@ public class ChatGPTHelper {
     @Value("${gpt.api.temperature}")
     private String temperature;
 
+    private final ObjectMapper objectMapper;
+
     public TarotResponse tarotMeChatGPT(TarotRequest request) throws Exception {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 
@@ -36,7 +40,6 @@ public class ChatGPTHelper {
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Authorization", auth);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("model", model);
@@ -57,14 +60,14 @@ public class ChatGPTHelper {
     }
 
     private String prepareQuestion(TarotRequest request) {
-        String pattern = "Hi, GPT. Tell me the TAROT. My question is - \"%s\". My cards are \"%s\"";
+        String pattern = "Hi, GPT. Tell me the TAROT without explaining each card. My question is - \"%s\". My cards are \"%s\"";
         String cards = request.cards().stream().map(card -> {
             if (card.reversed()) {
                 return card.name() + " reversed";
             }
             return card.name();
         }).collect(Collectors.joining(", "));
-        return String.format(pattern, request.question(), cards);
+        return String.format(pattern, request.text(), cards);
     }
 
 }
