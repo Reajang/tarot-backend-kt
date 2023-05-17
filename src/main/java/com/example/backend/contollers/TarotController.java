@@ -42,14 +42,14 @@ public class TarotController {
     }
 
 
-    private final YandexTranslateHelper yandexTranslateHelper;
-    @PostMapping("/translate")
-    public String translate(@RequestBody Text text) throws IOException, URISyntaxException, InterruptedException {
-        return yandexTranslateHelper.translate(text.value, Language.EN, Language.RU);
-    }
-
-    @Data
-    static class Text {
-        private String value;
-    }
+//    private final YandexTranslateHelper yandexTranslateHelper;
+//    @PostMapping("/translate")
+//    public String translate(@RequestBody Text text) throws IOException, URISyntaxException, InterruptedException {
+//        return yandexTranslateHelper.translate(text.value, Language.EN, Language.RU);
+//    }
+//
+//    @Data
+//    static class Text {
+//        private String value;
+//    }
 }
