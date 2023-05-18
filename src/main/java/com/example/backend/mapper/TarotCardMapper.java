@@ -1,9 +1,9 @@
 package com.example.backend.mapper;
 
-import com.example.backend.domain.TarotCard;
-import com.example.backend.domain.TarotCardType;
-import com.example.backend.dto.TarotCardDto;
-import com.example.backend.dto.TarotCardTypeDto;
+import com.example.backend.domain.tarot.TarotCard;
+import com.example.backend.domain.tarot.TarotCardType;
+import com.example.backend.dto.tarot.TarotCardDto;
+import com.example.backend.dto.tarot.TarotCardTypeDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

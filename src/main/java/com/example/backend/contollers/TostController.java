@@ -1,8 +1,7 @@
 package com.example.backend.contollers;
 
 
-import com.example.backend.dto.TostDto;
-import com.example.backend.repository.TostRepository;
+import com.example.backend.dto.tost.TostDto;
 import com.example.backend.service.TostService;
 import java.util.List;
 import java.util.UUID;

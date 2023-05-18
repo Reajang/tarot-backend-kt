@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.tarot;
 
 import java.util.UUID;
 

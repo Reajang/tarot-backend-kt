@@ -4,8 +4,8 @@ import static com.example.backend.helpers.utils.ChatGPTUtils.*;
 import static java.util.Spliterators.*;
 import static org.apache.commons.lang3.StringUtils.*;
 
-import com.example.backend.dto.TarotRequest;
-import com.example.backend.dto.TarotResponse;
+import com.example.backend.dto.tarot.TarotRequest;
+import com.example.backend.dto.tarot.TarotResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

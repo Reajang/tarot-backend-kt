@@ -1,6 +1,6 @@
 package com.example.backend.repository;
 
-import com.example.backend.domain.Tost;
+import com.example.backend.domain.tost.Tost;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.repository.CrudRepository;

@@ -1,16 +1,11 @@
 package com.example.backend.contollers;
 
-import com.example.backend.dto.TarotCardDto;
-import com.example.backend.dto.TarotRequest;
-import com.example.backend.dto.TarotResponse;
-import com.example.backend.helpers.Language;
-import com.example.backend.helpers.YandexTranslateHelper;
+import com.example.backend.dto.tarot.TarotCardDto;
+import com.example.backend.dto.tarot.TarotRequest;
+import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.service.TarotService;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

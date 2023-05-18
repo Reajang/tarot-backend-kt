@@ -1,5 +1,6 @@
-package com.example.backend.dto;
+package com.example.backend.dto.tarot;
 
+import com.example.backend.dto.common.Translatable;
 import com.example.backend.helpers.Language;
 import java.util.List;
 

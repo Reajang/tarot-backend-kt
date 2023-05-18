@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.TarotCardDto;
-import com.example.backend.dto.TarotRequest;
-import com.example.backend.dto.TarotResponse;
+import com.example.backend.dto.tarot.TarotCardDto;
+import com.example.backend.dto.tarot.TarotRequest;
+import com.example.backend.dto.tarot.TarotResponse;
 import java.util.List;
 
 public interface TarotService {

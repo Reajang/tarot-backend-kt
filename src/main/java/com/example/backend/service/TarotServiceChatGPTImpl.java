@@ -1,9 +1,9 @@
 package com.example.backend.service;
 
-import com.example.backend.domain.TarotCard;
-import com.example.backend.dto.TarotCardDto;
-import com.example.backend.dto.TarotRequest;
-import com.example.backend.dto.TarotResponse;
+import com.example.backend.domain.tarot.TarotCard;
+import com.example.backend.dto.tarot.TarotCardDto;
+import com.example.backend.dto.tarot.TarotRequest;
+import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.helpers.ChatGPTHelper;
 import com.example.backend.helpers.Language;
 import com.example.backend.helpers.YandexTranslateHelper;

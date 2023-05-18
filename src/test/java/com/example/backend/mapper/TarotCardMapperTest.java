@@ -2,9 +2,9 @@ package com.example.backend.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.backend.domain.TarotCard;
-import com.example.backend.domain.TarotCardType;
-import com.example.backend.dto.TarotCardDto;
+import com.example.backend.domain.tarot.TarotCard;
+import com.example.backend.domain.tarot.TarotCardType;
+import com.example.backend.dto.tarot.TarotCardDto;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

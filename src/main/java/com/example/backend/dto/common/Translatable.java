@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.common;
 
 import com.example.backend.helpers.Language;
 

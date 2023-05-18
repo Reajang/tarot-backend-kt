@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
-import com.example.backend.domain.Tost;
-import com.example.backend.dto.TostDto;
+import com.example.backend.domain.tost.Tost;
+import com.example.backend.dto.tost.TostDto;
 import com.example.backend.mapper.TostMapper;
 import com.example.backend.repository.TostRepository;
 import java.util.Collections;

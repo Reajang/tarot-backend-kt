@@ -1,6 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.TostDto;
+import com.example.backend.dto.tost.TostDto;
 import java.util.List;
 import java.util.UUID;
 

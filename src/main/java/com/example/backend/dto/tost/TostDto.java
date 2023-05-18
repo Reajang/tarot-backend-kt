@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.tost;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
