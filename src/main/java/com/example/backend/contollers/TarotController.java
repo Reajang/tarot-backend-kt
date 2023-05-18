@@ -35,16 +35,4 @@ public class TarotController {
     public TarotCardDto takeATry() {
         return tarotService.randomOne();
     }
-
-
-//    private final YandexTranslateHelper yandexTranslateHelper;
-//    @PostMapping("/translate")
-//    public String translate(@RequestBody Text text) throws IOException, URISyntaxException, InterruptedException {
-//        return yandexTranslateHelper.translate(text.value, Language.EN, Language.RU);
-//    }
-//
-//    @Data
-//    static class Text {
-//        private String value;
-//    }
 }
