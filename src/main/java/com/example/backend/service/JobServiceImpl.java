@@ -1,14 +1,22 @@
 package com.example.backend.service;
 
 import com.example.backend.domain.system.Job;
+import com.example.backend.domain.system.JobResult;
 import com.example.backend.domain.system.JobStatus;
 import com.example.backend.domain.system.JobType;
 import com.example.backend.dto.system.JobDto;
+import com.example.backend.exceptions.ResourceNotFound;
 import com.example.backend.mapper.JobMapper;
 import com.example.backend.repository.JobRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class JobServiceImpl implements JobService {
 
     private final JobRepository repository;
+    private final ObjectMapper objectMapper;
 
     @Override
     public UUID createNew(JobType jobType) {
@@ -29,9 +38,11 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDto get(UUID jobId) {
-        return repository.findById(jobId)
+        return jobId != null
+            ? repository.findById(jobId)
             .map(JobMapper.INSTANCE::map)
-            .orElse(null);
+            .orElse(null)
+            : null;
     }
 
     @Override
@@ -44,5 +55,62 @@ public class JobServiceImpl implements JobService {
                 },
                 () -> log.error("Job id={} doesn't exists", jobId));
 
+    }
+
+    @Override
+    public void update(UUID jobId, JobStatus newStatus, List<Object> results) {
+        Optional<Job> optionalJob = repository.findById(jobId);
+        if (optionalJob.isPresent()) {
+            Job job = optionalJob.get();
+
+            List<JobResult> jobResults = results.stream()
+                .map(resultData -> {
+                    JobResult jobResult = new JobResult();
+                    jobResult.setJob(job);
+                    String preparedForSavingResultData;
+                    Class<?> resultDataType = null;
+                    try {
+                        preparedForSavingResultData = objectMapper.writeValueAsString(resultData);
+                        resultDataType = resultData.getClass();
+                    } catch (JsonProcessingException e) {
+                        log.warn("Can not write result data to job{} as JSON. Data will be saved as string. Data:\n{}", jobId, resultData);
+                        preparedForSavingResultData = resultData.toString();
+                    }
+                    jobResult.setData(preparedForSavingResultData);
+                    jobResult.setType(ObjectUtils.defaultIfNull(resultDataType, "text").toString());
+                    return jobResult;
+                })
+                .collect(Collectors.toList());
+
+            job.setStatus(newStatus);
+            job.setResults(jobResults);
+            repository.save(job);
+        }
+        throw new ResourceNotFound(Job.class.getName(), jobId.toString());
+    }
+
+    @Override
+    public void setErrors(UUID jobId, List<Throwable> errors) {
+        setErrorsAsStrings(
+            jobId,
+            errors.stream()
+                .map(Throwable::getMessage)
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public void setErrorsAsStrings(UUID jobId, List<String> errorsInfo) {
+        Optional<Job> optionalJob = repository.findById(jobId);
+        if (optionalJob.isPresent()) {
+            Job job = optionalJob.get();
+            List<JobResult> jobResults = errorsInfo.stream()
+                .map(errorText -> new JobResult(job, errorText, "text"))
+                .collect(Collectors.toList());
+            job.setStatus(JobStatus.ERROR);
+            job.setResults(jobResults);
+            repository.save(job);
+        }
+        throw new ResourceNotFound(Job.class.getName(), jobId.toString());
     }
 }

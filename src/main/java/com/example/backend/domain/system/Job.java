@@ -1,14 +1,15 @@
 package com.example.backend.domain.system;
 
+import com.example.backend.domain.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,17 +21,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Job {
-
-    @Id
-    @Column(name = "id")
-    private UUID id;
-
-    @Column(name = "create_date")
-    private Instant createDate;
-
-    @Column(name = "udpate_date")
-    private Instant updateDate;
+public class Job extends BaseEntity {
 
     @Column(name = "type")
     @Enumerated(value = EnumType.STRING)
@@ -40,19 +31,8 @@ public class Job {
     @Enumerated(value = EnumType.STRING)
     private JobStatus status;
 
-    @PreUpdate
-    @PrePersist
-    public void preSave() {
-        if (this.id == null) {
-            this.id = UUID.randomUUID();
-        }
-
-        Instant now = Instant.now();
-        if (this.createDate == null) {
-            this.createDate = now;
-        }
-        this.updateDate = now;
-    }
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JobResult> results;
 
     @Transient
     public static Job newIdle(JobType jobType) {

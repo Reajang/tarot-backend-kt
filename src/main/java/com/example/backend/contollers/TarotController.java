@@ -5,6 +5,7 @@ import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.service.TarotService;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,14 @@ public class TarotController {
     @PostMapping("/question")
     public TarotResponse ask(@RequestBody TarotRequest request) throws Exception {
         return tarotService.ask(request);
+    }
+
+    /**
+     * @return Async Job id
+     */
+    @PostMapping("/question/async")
+    public UUID askAsync(@RequestBody TarotRequest request) throws Exception {
+        return tarotService.askAsync(request);
     }
 
 
