@@ -33,6 +33,28 @@ public class YandexTranslateHelper {
 
     public String translate(String textToTranslate, Language sourceLanguage, Language targetLanguage)
         throws IOException, InterruptedException, URISyntaxException {
+        HttpRequest httpRequest = prepareHttpRequest(textToTranslate, sourceLanguage, targetLanguage);
+
+        HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+        JsonNode jsonNode = objectMapper.readTree(httpResponse.body());
+        JsonNode firstTranslation = jsonNode.get("translations").get(0);
+        return firstTranslation.get("text").asText();
+    }
+
+    private HttpRequest prepareHttpRequest(String textToTranslate, Language sourceLanguage, Language targetLanguage)
+        throws URISyntaxException {
+        return HttpRequest.newBuilder()
+            .POST(HttpRequest.BodyPublishers.ofByteArray(prepareBody(textToTranslate, sourceLanguage, targetLanguage)))
+            .uri(new URI(url))
+            .headers(
+                "Content-Type", "application/json",
+                "Authorization", authType + SPACE + apiKey
+            )
+            .build();
+    }
+
+    private byte[] prepareBody(String textToTranslate, Language sourceLanguage, Language targetLanguage) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         String[] texts = new String[] {ObjectUtils.defaultIfNull(textToTranslate, EMPTY)};
@@ -41,16 +63,7 @@ public class YandexTranslateHelper {
         objectNode.put("targetLanguageCode", targetLanguage.getCode());
         objectNode.put("texts", Arrays.toString(texts));
 
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-            .POST(HttpRequest.BodyPublishers.ofString(objectNode.toString()))
-            .uri(new URI(url))
-            .header("Content-Type", "application/json")
-            .header("Authorization", authType + SPACE + apiKey)
-            .build();
-
-        HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        JsonNode jsonNode = objectMapper.readTree(httpResponse.body());
-        JsonNode firstTranslation = jsonNode.get("translations").get(0);
-        return firstTranslation.get("text").asText();
+        return objectNode.toString().getBytes();
     }
+
 }
