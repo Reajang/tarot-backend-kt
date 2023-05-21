@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
-@Transactional
 public class TarotServiceChatGPTImpl implements TarotService {
 
     private final TarotCardRepository repository;
@@ -28,6 +27,7 @@ public class TarotServiceChatGPTImpl implements TarotService {
     private final Random randomizer = new Random(31);
 
     @Override
+    @Transactional(readOnly = true)
     public List<TarotCardDto> getAllCards() {
         return repository.findAll()
             .stream()
@@ -37,6 +37,7 @@ public class TarotServiceChatGPTImpl implements TarotService {
     }
 
     @Override
+    @Transactional
     public TarotResponse ask(TarotRequest request) throws Exception {
         return tarotHelper.futureTell(request);
     }
@@ -49,6 +50,7 @@ public class TarotServiceChatGPTImpl implements TarotService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TarotCardDto randomOne() {
         List<TarotCard> tarotCards = repository.findAll();
         Random random = new Random(31);

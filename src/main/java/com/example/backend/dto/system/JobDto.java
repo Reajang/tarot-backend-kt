@@ -3,6 +3,7 @@ package com.example.backend.dto.system;
 import com.example.backend.domain.system.JobStatus;
 import com.example.backend.domain.system.JobType;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 public record JobDto(
@@ -10,6 +11,7 @@ public record JobDto(
     Instant createDate,
     Instant updateDate,
     JobType type,
-    JobStatus status
+    JobStatus status,
+    List<JobResultDto> results
 ) {
 }

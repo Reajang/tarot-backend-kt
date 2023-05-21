@@ -32,11 +32,11 @@ public class TarotHelper {
             log.error("The job (id={}) doesn't exist", jobId);
             return;
         }
+        jobService.update(jobId, JobStatus.RUNNING);
 
         try {
             TarotResponse tarotResponse = futureTell(request);
             jobService.update(jobId, JobStatus.COMPLETE, List.of(tarotResponse));
-
         } catch (Exception e) {
             log.error("Error while async future telling for jobId={}, TarotRequest={}", jobId, request);
             log.error("Error", e);

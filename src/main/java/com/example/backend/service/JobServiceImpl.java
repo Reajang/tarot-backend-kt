@@ -18,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class JobServiceImpl implements JobService {
 
@@ -37,6 +37,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public JobDto get(UUID jobId) {
         return jobId != null
             ? repository.findById(jobId)
@@ -46,6 +47,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @Transactional
     public void update(UUID jobId, JobStatus newStatus) {
         log.info("Try to update status job with id={}, new status={}", jobId, newStatus);
         repository.findById(jobId)
@@ -58,38 +60,41 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @Transactional
     public void update(UUID jobId, JobStatus newStatus, List<Object> results) {
         Optional<Job> optionalJob = repository.findById(jobId);
-        if (optionalJob.isPresent()) {
-            Job job = optionalJob.get();
-
-            List<JobResult> jobResults = results.stream()
-                .map(resultData -> {
-                    JobResult jobResult = new JobResult();
-                    jobResult.setJob(job);
-                    String preparedForSavingResultData;
-                    Class<?> resultDataType = null;
-                    try {
-                        preparedForSavingResultData = objectMapper.writeValueAsString(resultData);
-                        resultDataType = resultData.getClass();
-                    } catch (JsonProcessingException e) {
-                        log.warn("Can not write result data to job{} as JSON. Data will be saved as string. Data:\n{}", jobId, resultData);
-                        preparedForSavingResultData = resultData.toString();
-                    }
-                    jobResult.setData(preparedForSavingResultData);
-                    jobResult.setType(ObjectUtils.defaultIfNull(resultDataType, "text").toString());
-                    return jobResult;
-                })
-                .collect(Collectors.toList());
-
-            job.setStatus(newStatus);
-            job.setResults(jobResults);
-            repository.save(job);
+        if (optionalJob.isEmpty()) {
+            throw new ResourceNotFound(Job.class.getName(), jobId.toString());
         }
-        throw new ResourceNotFound(Job.class.getName(), jobId.toString());
+        Job job = optionalJob.get();
+
+        List<JobResult> jobResults = results.stream()
+            .map(resultData -> {
+                JobResult jobResult = new JobResult();
+                jobResult.setJob(job);
+                String preparedForSavingResultData;
+                String resultDataType = null;
+                try {
+                    preparedForSavingResultData = objectMapper.writeValueAsString(resultData);
+                    System.out.println(preparedForSavingResultData);
+                    resultDataType = resultData.getClass().getCanonicalName();
+                } catch (JsonProcessingException e) {
+                    log.warn("Can not write result data to job{} as JSON. Data will be saved as string. Data:\n{}", jobId, resultData);
+                    preparedForSavingResultData = resultData.toString();
+                }
+                jobResult.setData(preparedForSavingResultData);
+                jobResult.setType(ObjectUtils.defaultIfNull(resultDataType, "text"));
+                return jobResult;
+            })
+            .toList();
+
+        job.setStatus(newStatus);
+        job.getResults().addAll(jobResults);
+        repository.save(job);
     }
 
     @Override
+    @Transactional
     public void setErrors(UUID jobId, List<Throwable> errors) {
         setErrorsAsStrings(
             jobId,
@@ -100,17 +105,18 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @Transactional
     public void setErrorsAsStrings(UUID jobId, List<String> errorsInfo) {
         Optional<Job> optionalJob = repository.findById(jobId);
-        if (optionalJob.isPresent()) {
-            Job job = optionalJob.get();
-            List<JobResult> jobResults = errorsInfo.stream()
-                .map(errorText -> new JobResult(job, errorText, "text"))
-                .collect(Collectors.toList());
-            job.setStatus(JobStatus.ERROR);
-            job.setResults(jobResults);
-            repository.save(job);
+        if (optionalJob.isEmpty()) {
+            throw new ResourceNotFound(Job.class.getName(), jobId.toString());
         }
-        throw new ResourceNotFound(Job.class.getName(), jobId.toString());
+        Job job = optionalJob.get();
+        List<JobResult> jobResults = errorsInfo.stream()
+            .map(errorText -> new JobResult(job, errorText, "text"))
+            .collect(Collectors.toList());
+        job.setStatus(JobStatus.ERROR);
+        job.setResults(jobResults);
+        repository.save(job);
     }
 }
