@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +40,7 @@ public class YandexTranslateHelper {
 
         JsonNode jsonNode = objectMapper.readTree(httpResponse.body());
         JsonNode firstTranslation = jsonNode.get("translations").get(0);
-        return firstTranslation.get("text").asText();
+        return deleteYandexSystemParentheses(firstTranslation.get("text").asText());
     }
 
     private HttpRequest prepareHttpRequest(String textToTranslate, Language sourceLanguage, Language targetLanguage)
@@ -64,6 +65,27 @@ public class YandexTranslateHelper {
         objectNode.put("texts", Arrays.toString(texts));
 
         return objectNode.toString().getBytes();
+    }
+
+    private String deleteYandexSystemParentheses(String translateResponseWithinParentheses) {
+        if (StringUtils.isBlank(translateResponseWithinParentheses)) {
+            return EMPTY;
+        }
+        int startIndex = 0;
+        int endIndex = translateResponseWithinParentheses.length();
+        boolean stringHadSystemParentheses = false;
+
+        if (translateResponseWithinParentheses.charAt(0) == '[') {
+            startIndex++;
+            stringHadSystemParentheses = true;
+        }
+        if (translateResponseWithinParentheses.charAt(translateResponseWithinParentheses.length() - 1) == ']') {
+            endIndex--;
+            stringHadSystemParentheses = true;
+        }
+        return stringHadSystemParentheses
+            ? translateResponseWithinParentheses.substring(startIndex, endIndex)
+            : translateResponseWithinParentheses;
     }
 
 }
