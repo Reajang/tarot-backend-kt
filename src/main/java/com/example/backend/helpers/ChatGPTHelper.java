@@ -47,6 +47,7 @@ public class ChatGPTHelper {
         HttpRequest httpRequest = prepareHttpRequest(request);
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
+        //Бывает клиент возвращает ошибки
         JsonNode responseBody = objectMapper.readTree(httpResponse.body());
 
         String gptResponse = StreamSupport.stream(

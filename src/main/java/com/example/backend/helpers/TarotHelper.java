@@ -5,6 +5,8 @@ import com.example.backend.dto.system.JobDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.service.JobService;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -46,16 +48,22 @@ public class TarotHelper {
 
     @Transactional
     public TarotResponse futureTell(TarotRequest request) throws Exception {
-        TarotRequest translatedInEngRequest;
+        TarotRequest translatedInEngRequest = translateRequestIfNecessary(request);
+        TarotResponse tarotResponse = chatGPTHelper.tarotMeChatGPT(translatedInEngRequest);
+        return translateResponseIfNecessary(request, tarotResponse);
+    }
+
+    private TarotRequest translateRequestIfNecessary(TarotRequest request)
+        throws IOException, URISyntaxException, InterruptedException {
         if (request.from() != Language.EN) {
             String questionInEnglish = yandexTranslateHelper.translate(request.text(), request.from(), request.to());
-            translatedInEngRequest = new TarotRequest(request.cards(), questionInEnglish, request.from(), request.to());
-        } else {
-            translatedInEngRequest = request;
+            return new TarotRequest(request.cards(), questionInEnglish, request.from(), request.to());
         }
+        return request;
+    }
 
-        TarotResponse tarotResponse = chatGPTHelper.tarotMeChatGPT(translatedInEngRequest);
-
+    private TarotResponse translateResponseIfNecessary(TarotRequest request, TarotResponse tarotResponse)
+        throws IOException, URISyntaxException, InterruptedException {
         if (request.from() != Language.EN) {
             String responseInEnglish = yandexTranslateHelper.translate(tarotResponse.text(), request.to(), request.from());
             return new TarotResponse(tarotResponse.cards(), responseInEnglish, request.to(), request.from());
