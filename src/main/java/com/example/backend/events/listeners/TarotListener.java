@@ -8,7 +8,6 @@ import com.example.backend.events.Event;
 import com.example.backend.events.publishers.JobPublisher;
 import com.example.backend.events.publishers.TarotPublisher;
 import com.example.backend.events.tarot.TarotPredictionRequestEvent;
-import com.example.backend.events.tarot.TarotPredictionResponseEvent;
 import com.example.backend.helpers.TarotHelper;
 import com.example.backend.mapper.TarotCardMapper;
 import com.example.backend.service.JobService;

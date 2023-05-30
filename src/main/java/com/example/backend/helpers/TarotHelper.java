@@ -2,7 +2,6 @@ package com.example.backend.helpers;
 
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
-import com.example.backend.events.publishers.TarotPublisher;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import lombok.AllArgsConstructor;
@@ -17,18 +16,20 @@ public class TarotHelper {
 
     private final ChatGPTHelper chatGPTHelper;
     private final YandexTranslateHelper yandexTranslateHelper;
-    private final TarotPublisher tarotPublisher;
 
     @Transactional
     public TarotResponse futureTell(TarotRequest request) throws Exception {
+        log.info("Try get prediction");
         TarotRequest translatedInEngRequest = translateRequestIfNecessary(request);
         TarotResponse tarotResponse = chatGPTHelper.tarotMeChatGPT(translatedInEngRequest);
+        log.info("Successfully got tarot prediction");
         return translateResponseIfNecessary(request, tarotResponse);
     }
 
     private TarotRequest translateRequestIfNecessary(TarotRequest request)
         throws IOException, URISyntaxException, InterruptedException {
         if (request.from() != Language.EN) {
+            log.info("Tarot request should be translated from={} to{}", request.from(), request.to());
             String questionInEnglish = yandexTranslateHelper.translate(request.text(), request.from(), request.to());
             return new TarotRequest(request.cards(), questionInEnglish, request.from(), request.to());
         }
@@ -38,6 +39,7 @@ public class TarotHelper {
     private TarotResponse translateResponseIfNecessary(TarotRequest request, TarotResponse tarotResponse)
         throws IOException, URISyntaxException, InterruptedException {
         if (request.from() != Language.EN) {
+            log.info("Tarot response should be translated back from={} to{}", request.to(), request.from());
             String responseInEnglish = yandexTranslateHelper.translate(tarotResponse.text(), request.to(), request.from());
             return new TarotResponse(tarotResponse.cards(), responseInEnglish, request.to(), request.from());
         }

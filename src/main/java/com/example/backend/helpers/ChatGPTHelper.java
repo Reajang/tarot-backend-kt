@@ -20,12 +20,14 @@ import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ChatGPTHelper {
 
     @Value("${gpt.api.url}")
@@ -45,11 +47,17 @@ public class ChatGPTHelper {
     private final ObjectMapper objectMapper;
 
     public TarotResponse tarotMeChatGPT(TarotRequest request) throws Exception {
+        log.info("Send tarot request to ChatGPT");
         HttpRequest httpRequest = prepareHttpRequest(request);
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
+        log.info("Waiting for responses...");
+
         //Бывает клиент возвращает ошибки
         JsonNode responseBody = objectMapper.readTree(httpResponse.body());
+
+        log.info("ChatGPT response on request={}", responseBody);
+        log.info("Try to find choices.message.content in response");
 
         String gptResponse = StreamSupport.stream(
                 spliteratorUnknownSize(responseBody.get("choices").iterator(), Spliterator.ORDERED),

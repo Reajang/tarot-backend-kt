@@ -13,6 +13,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class YandexTranslateHelper {
 
     @Value("${yandex.api.translate.url}")
@@ -34,11 +36,20 @@ public class YandexTranslateHelper {
 
     public String translate(String textToTranslate, Language sourceLanguage, Language targetLanguage)
         throws IOException, InterruptedException, URISyntaxException {
+        log.info("Start translation via Yandex API text={} from={} to{}",
+            textToTranslate.length() > 50 ? textToTranslate.substring(0, 50) + "..." : textToTranslate,
+            sourceLanguage.getCode(),
+            targetLanguage.getCode()
+        );
+
         HttpRequest httpRequest = prepareHttpRequest(textToTranslate, sourceLanguage, targetLanguage);
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
         JsonNode jsonNode = objectMapper.readTree(httpResponse.body());
+
+        log.info("Response from Yandex API: {}", jsonNode);
+
         JsonNode firstTranslation = jsonNode.get("translations").get(0);
         return deleteYandexSystemParentheses(firstTranslation.get("text").asText());
     }
