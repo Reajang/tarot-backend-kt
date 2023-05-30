@@ -36,8 +36,7 @@ public class Job extends BaseEntity {
     private JobStatus status;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<JobResult> results = new ArrayList<>();
+    private List<JobResult> results;
 
     @Transient
     public static Job newIdle(JobType jobType) {
