@@ -3,15 +3,21 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'org.flywaydb.flyway' version '9.16.2'
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '19'
 
+apply plugin: 'maven-publish'
+
+
 ext {
     mapstruct_version = '1.5.3.Final'
     flyway_version = '9.16.2'
+    kafka_spring_version = '3.0.0'
+    kafka_clients_version = '3.4.0'
 }
 
 configurations {
@@ -33,16 +39,25 @@ dependencies {
     implementation "org.flywaydb:flyway-core:${flyway_version}"
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
 
+
+    implementation "org.springframework.kafka:spring-kafka"
+    implementation "org.apache.kafka:kafka-clients:${kafka_clients_version}"
+
+
     compileOnly 'org.projectlombok:lombok'
     compileOnly 'org.springframework.boot:spring-boot-devtools'
+
+//    api 'com.gruelbox:transactionoutbox-spring:5.3.370'
 
     runtimeOnly 'org.postgresql:postgresql'
 
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+//    testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 tasks.named('test') {

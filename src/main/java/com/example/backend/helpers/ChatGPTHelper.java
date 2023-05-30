@@ -6,8 +6,10 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
+import com.example.backend.events.TarotPredictionRequestEvent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -54,7 +56,8 @@ public class ChatGPTHelper {
                 spliteratorUnknownSize(responseBody.get("choices").iterator(), Spliterator.ORDERED),
                 false)
             .filter(Objects::nonNull)
-            .map(jsonNode -> jsonNode.get("text").asText())
+//            .map(jsonNode -> jsonNode.get("text").asText())
+            .map(jsonNode -> jsonNode.get("message").get("content").asText())
             .filter(StringUtils::isNotBlank)
             .map(answer -> answer.replaceAll(SPECIAL_SYMBOLS_TO_EXCLUDE, EMPTY))
             .collect(Collectors.joining("\n"));
@@ -77,9 +80,13 @@ public class ChatGPTHelper {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("model", model);
-        objectNode.put("prompt", prepareQuestion(request));
         objectNode.put("max_tokens", Long.parseLong(maxTokens));
         objectNode.put("temperature", Double.parseDouble(temperature));
+//        objectNode.put("prompt", prepareQuestion(request));
+        ArrayNode messagesArrayNode = objectNode.putArray("messages");
+        ObjectNode messagesNode = messagesArrayNode.insertObject(0);
+        messagesNode.put("role", "user");
+        messagesNode.put("content", prepareQuestion(request));
 
         return objectNode.toString().getBytes();
     }
@@ -87,11 +94,11 @@ public class ChatGPTHelper {
     private String prepareQuestion(TarotRequest request) {
         String cards = request.cards().stream().map(card -> {
             if (card.reversed()) {
-                return card.name() + " reversed";
+                return card.name() + " (reversed)";
             }
             return card.name();
         }).collect(Collectors.joining(", "));
-        return String.format(TAROT_DEFAULT_TEMPLATE, request.text(), cards);
+        return String.format(TAROT_DEFAULT_TEMPLATE_LONG, request.text(), cards);
     }
 
 }

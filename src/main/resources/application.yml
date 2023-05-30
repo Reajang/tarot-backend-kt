@@ -1,0 +1,71 @@
+server:
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: AstanaTest
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/astana
+    username: postgres
+    password: postgres
+  flyway:
+    url: jdbc:postgresql://localhost:5432/astana
+    schemas: public
+    user: postgres
+    password: postgres
+  kafka:
+    bootstrap-servers: localhost:9093
+    producer:
+      client-id: astana-service
+#      transaction-id-prefix: astana-${hostname:localhost}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: astana-group-1
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+        session:
+          timeout:
+            ms: 30000
+      isolation-level: read_committed
+      max-poll-records: 10
+    listener:
+      concurrency: 1
+
+
+kafka:
+  prefix: astana
+  topic:
+    events: ${kafka.prefix}_events
+    tarot-events: ${kafka.prefix}_tarot_events
+
+gpt:
+  api:
+    #    url: https://api.openai.com/v1/completions
+    url: https://api.openai.com/v1/chat/completions
+    model: gpt-3.5-turbo
+    #    model: text-davinci-003
+    max_tokens: 4000
+    temperature: 1.0
+    auth:
+      type: Bearer
+      bearer:
+
+yandex:
+  api:
+    translate:
+      url: https://translate.api.cloud.yandex.net/translate/v2/translate
+      auth:
+        type: Api-Key
+        apikey:

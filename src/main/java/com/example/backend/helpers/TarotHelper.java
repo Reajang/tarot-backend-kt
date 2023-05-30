@@ -4,6 +4,7 @@ import com.example.backend.domain.system.JobStatus;
 import com.example.backend.dto.system.JobDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
+import com.example.backend.events.publishers.TarotPublisher;
 import com.example.backend.service.JobService;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,10 +24,11 @@ public class TarotHelper {
     private final ChatGPTHelper chatGPTHelper;
     private final YandexTranslateHelper yandexTranslateHelper;
     private final JobService jobService;
-
+    private final TarotPublisher tarotPublisher;
 
     @Async
     @Transactional
+
     public void futureTellAsync(TarotRequest request, UUID jobId) {
         log.info("Start async future telling in TarotHelper for jobId={}. TarotRequest={}", jobId, request);
         JobDto job = jobService.get(jobId);
@@ -50,7 +52,9 @@ public class TarotHelper {
     public TarotResponse futureTell(TarotRequest request) throws Exception {
         TarotRequest translatedInEngRequest = translateRequestIfNecessary(request);
         TarotResponse tarotResponse = chatGPTHelper.tarotMeChatGPT(translatedInEngRequest);
-        return translateResponseIfNecessary(request, tarotResponse);
+        TarotResponse translatedTarotResponse = translateResponseIfNecessary(request, tarotResponse);
+        tarotPublisher.publishTarotPredictionResponseEvent(translatedTarotResponse);
+        return translatedTarotResponse;
     }
 
     private TarotRequest translateRequestIfNecessary(TarotRequest request)

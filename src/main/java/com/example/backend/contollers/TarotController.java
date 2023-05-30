@@ -3,6 +3,7 @@ package com.example.backend.contollers;
 import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
+import com.example.backend.events.publishers.TarotPublisher;
 import com.example.backend.service.TarotService;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TarotController {
 
     private final TarotService tarotService;
+    private final TarotPublisher tarotPublisher;
 
     @GetMapping("/cards")
     public List<TarotCardDto> allCards() {
@@ -36,6 +38,7 @@ public class TarotController {
      */
     @PostMapping("/question/async")
     public UUID askAsync(@RequestBody TarotRequest request) throws Exception {
+        tarotPublisher.publishTarotPredictionRequestEvent(request);
         return tarotService.askAsync(request);
     }
 
