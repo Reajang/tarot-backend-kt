@@ -6,9 +6,8 @@ import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.dto.tarot.TarotCardTypeDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
-import com.example.backend.events.TarotPredictionRequestEvent;
-import com.example.backend.events.TarotPredictionResponseEvent;
-import org.mapstruct.BeanMapping;
+import com.example.backend.events.tarot.TarotPredictionRequestEvent;
+import com.example.backend.events.tarot.TarotPredictionResponseEvent;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -33,19 +32,19 @@ public interface TarotCardMapper {
 
     TarotCardTypeDto mapType(TarotCardType type);
 
-    @Mapping(target = "message", constant = "test tarot response event")
-    @Mapping(target = "eventType", constant = "TAROT_RESPONSE")
-    @Mapping(target = "objectId", ignore = true)
+    @Mapping(target = "jobId", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "eventType", ignore = true)
     TarotPredictionResponseEvent map(TarotResponse tarotResponse);
 
-    @BeanMapping(ignoreByDefault = true)
     TarotResponse map(TarotPredictionResponseEvent tarotResponseEvent);
 
-    @Mapping(target = "message", constant = "test tarot request event")
-    @Mapping(target = "eventType", constant = "TAROT_REQUEST")
-    @Mapping(target = "objectId", ignore = true)
+    @Mapping(target = "jobId", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "eventType", ignore = true)
     TarotPredictionRequestEvent map(TarotRequest tarotRequest);
 
-    @BeanMapping(ignoreByDefault = true)
     TarotRequest map(TarotPredictionRequestEvent tarotRequestEvent);
 }

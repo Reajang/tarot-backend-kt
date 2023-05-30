@@ -18,5 +18,5 @@ public interface JobService {
 
     void setErrors(UUID jobId, List<Throwable> errors);
 
-    void setErrorsAsStrings(UUID jobId, List<String> errorsInfo);
+    void setErrorsAsStrings(UUID jobId, List<Object> errorsInfo);
 }

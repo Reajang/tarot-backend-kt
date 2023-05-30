@@ -11,6 +11,7 @@ import com.example.backend.repository.JobRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -76,7 +77,7 @@ public class JobServiceImpl implements JobService {
                 String resultDataType = null;
                 try {
                     preparedForSavingResultData = objectMapper.writeValueAsString(resultData);
-                    System.out.println(preparedForSavingResultData);
+                    //TODO  Тут кафка теряет тип объекта при пересылке объектов типа List<Object>. Всегда поолучается из json -> LinkedHashMap
                     resultDataType = resultData.getClass().getCanonicalName();
                 } catch (JsonProcessingException e) {
                     log.warn("Can not write result data to job{} as JSON. Data will be saved as string. Data:\n{}", jobId, resultData);
@@ -106,14 +107,15 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional
-    public void setErrorsAsStrings(UUID jobId, List<String> errorsInfo) {
+    public void setErrorsAsStrings(UUID jobId, List<Object> errorsInfo) {
         Optional<Job> optionalJob = repository.findById(jobId);
         if (optionalJob.isEmpty()) {
             throw new ResourceNotFound(Job.class.getName(), jobId.toString());
         }
         Job job = optionalJob.get();
         List<JobResult> jobResults = errorsInfo.stream()
-            .map(errorText -> new JobResult(job, errorText, "text"))
+            .filter(Objects::nonNull)
+            .map(errorText -> new JobResult(job, errorText.toString(), "text"))
             .collect(Collectors.toList());
         job.setStatus(JobStatus.ERROR);
         job.setResults(jobResults);

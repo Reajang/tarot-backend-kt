@@ -5,6 +5,7 @@ import com.example.backend.domain.tarot.TarotCard;
 import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
+import com.example.backend.events.publishers.TarotPublisher;
 import com.example.backend.helpers.TarotHelper;
 import com.example.backend.mapper.TarotCardMapper;
 import com.example.backend.repository.TarotCardRepository;
@@ -23,6 +24,7 @@ public class TarotServiceChatGPTImpl implements TarotService {
     private final TarotCardRepository repository;
     private final JobService jobService;
     private final TarotHelper tarotHelper;
+    private final TarotPublisher tarotPublisher;
 
     private final Random randomizer = new Random(31);
 
@@ -45,7 +47,7 @@ public class TarotServiceChatGPTImpl implements TarotService {
     @Override
     public UUID askAsync(TarotRequest request) {
         UUID jobId = jobService.createNew(JobType.TAROT_FUTURE_TELL);
-        tarotHelper.futureTellAsync(request, jobId);
+        tarotPublisher.publishTarotPredictionRequestEvent(request, jobId);
         return jobId;
     }
 

@@ -6,7 +6,6 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
-import com.example.backend.events.TarotPredictionRequestEvent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;

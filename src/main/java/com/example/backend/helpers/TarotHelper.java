@@ -1,18 +1,12 @@
 package com.example.backend.helpers;
 
-import com.example.backend.domain.system.JobStatus;
-import com.example.backend.dto.system.JobDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.events.publishers.TarotPublisher;
-import com.example.backend.service.JobService;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,38 +17,13 @@ public class TarotHelper {
 
     private final ChatGPTHelper chatGPTHelper;
     private final YandexTranslateHelper yandexTranslateHelper;
-    private final JobService jobService;
     private final TarotPublisher tarotPublisher;
-
-    @Async
-    @Transactional
-
-    public void futureTellAsync(TarotRequest request, UUID jobId) {
-        log.info("Start async future telling in TarotHelper for jobId={}. TarotRequest={}", jobId, request);
-        JobDto job = jobService.get(jobId);
-        if (job == null) {
-            log.error("The job (id={}) doesn't exist", jobId);
-            return;
-        }
-        jobService.update(jobId, JobStatus.RUNNING);
-
-        try {
-            TarotResponse tarotResponse = futureTell(request);
-            jobService.update(jobId, JobStatus.COMPLETE, List.of(tarotResponse));
-        } catch (Exception e) {
-            log.error("Error while async future telling for jobId={}, TarotRequest={}", jobId, request);
-            log.error("Error", e);
-            jobService.setErrors(jobId, List.of(e));
-        }
-    }
 
     @Transactional
     public TarotResponse futureTell(TarotRequest request) throws Exception {
         TarotRequest translatedInEngRequest = translateRequestIfNecessary(request);
         TarotResponse tarotResponse = chatGPTHelper.tarotMeChatGPT(translatedInEngRequest);
-        TarotResponse translatedTarotResponse = translateResponseIfNecessary(request, tarotResponse);
-        tarotPublisher.publishTarotPredictionResponseEvent(translatedTarotResponse);
-        return translatedTarotResponse;
+        return translateResponseIfNecessary(request, tarotResponse);
     }
 
     private TarotRequest translateRequestIfNecessary(TarotRequest request)

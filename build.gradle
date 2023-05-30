@@ -43,11 +43,13 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka"
     implementation "org.apache.kafka:kafka-clients:${kafka_clients_version}"
 
+    implementation 'org.apache.commons:commons-collections4:4.0'
 
     compileOnly 'org.projectlombok:lombok'
     compileOnly 'org.springframework.boot:spring-boot-devtools'
 
 //    api 'com.gruelbox:transactionoutbox-spring:5.3.370'
+
 
     runtimeOnly 'org.postgresql:postgresql'
 

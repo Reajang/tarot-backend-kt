@@ -6,11 +6,9 @@ import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public abstract class Event implements Serializable {
 
     @Serial
@@ -26,14 +24,5 @@ public abstract class Event implements Serializable {
      */
     private final Instant createDate = Instant.now();
 
-    /**
-     * Идентификатор объекта с которым связано событие
-     */
-    private String objectId;
-
     public abstract String getEventType();
-
-
-    public abstract String getMessage();
-
 }
