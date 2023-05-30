@@ -54,7 +54,7 @@ public class JobServiceImpl implements JobService {
         repository.findById(jobId)
             .ifPresentOrElse(job -> {
                     job.setStatus(newStatus);
-                    log.info("Job id={} successfully updated", jobId);
+                    log.info("Job id={} successfully updated to {}", jobId, newStatus);
                 },
                 () -> log.error("Job id={} doesn't exists", jobId));
 
