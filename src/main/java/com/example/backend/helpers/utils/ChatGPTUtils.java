@@ -10,5 +10,5 @@ public interface ChatGPTUtils {
         " Conditions: " +
         "1. Do not explain every single card, write just common prediction. " +
         "2. Pay attention there are might be reversed cards. It have special meaning." +
-        "3. Make a prediction with at least 2000 characters.";
+        "3. Make a prediction with at least 2000 characters but maximum 3000 characters.";
 }

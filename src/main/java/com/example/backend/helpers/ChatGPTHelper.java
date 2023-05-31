@@ -56,7 +56,7 @@ public class ChatGPTHelper {
         //Бывает клиент возвращает ошибки
         JsonNode responseBody = objectMapper.readTree(httpResponse.body());
 
-        log.info("ChatGPT response on request={}", responseBody);
+        log.info("ChatGPT response: {}", responseBody);
         log.info("Try to find choices.message.content in response");
 
         String gptResponse = StreamSupport.stream(
