@@ -35,7 +35,7 @@ public class Job extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private JobStatus status;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     private List<JobResult> results;
 
     @Transient
