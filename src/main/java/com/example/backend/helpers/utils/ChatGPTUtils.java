@@ -8,7 +8,5 @@ public interface ChatGPTUtils {
         " My question is - \"%s\"." +
         " My cards are \"%s\"." +
         " Conditions: " +
-        "1. Do not explain every single card, write just common prediction. " +
-        "2. Pay attention there are might be reversed cards. It have special meaning." +
-        "3. Make a prediction with at least 2000 characters but maximum 3000 characters.";
+        "1. Make a prediction for 2000 characters.";
 }
