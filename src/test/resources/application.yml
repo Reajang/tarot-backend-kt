@@ -1,0 +1,41 @@
+spring:
+  main:
+    lazy-initialization: true
+  application:
+    name: AstanaTest
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${test.container.postgresql.jdbc.url}
+    username: postgres
+    password: postgres
+  flyway:
+    url: ${spring.datasource.url}
+    schemas: public
+    user: postgres
+    password: postgres
+  kafka:
+    bootstrap-servers: ${test.container.kafka.bootstrap.servers}
+
+kafka:
+  prefix: astana
+  topic:
+    tarot-events: ${kafka.prefix}_tarot_events
+    job-events: ${kafka.prefix}_job_events
+
+gpt:
+  api:
+    url: https://api.openai.com/v1/chat/completions
+    model: gpt-3.5-turbo
+    max_tokens: 4000
+    temperature: 1.0
+    auth:
+      type: Bearer
+      bearer: test
+
+yandex:
+  api:
+    translate:
+      url: https://translate.api.cloud.yandex.net/translate/v2/translate
+      auth:
+        type: Api-Key
+        apikey: test
