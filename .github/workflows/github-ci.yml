@@ -36,6 +36,12 @@ jobs:
           java-version: '19'
           distribution: 'temurin'
 
+      - name: Run chmod to make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1.0.6
+
       - name: Test with Gradle
         uses: gradle/gradle-build-action@v2.4.2
         with:
