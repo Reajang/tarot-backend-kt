@@ -24,6 +24,7 @@ jobs:
           arguments: build test
 
   push_to_registry:
+    needs: build-test
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -45,5 +46,6 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: v3.2.5
+#          tags: ${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
