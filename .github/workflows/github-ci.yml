@@ -24,6 +24,12 @@ jobs:
         with:
           arguments: build
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: build/libs
+
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -47,11 +53,6 @@ jobs:
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: test
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: Package
-          path: build/libs
 
   push_to_docker_hub:
     needs: [ build, test ]
