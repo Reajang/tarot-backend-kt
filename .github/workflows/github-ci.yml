@@ -33,18 +33,12 @@ jobs:
           java-version: '19'
           distribution: 'temurin'
 
-      - name: Run chmod to make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1.0.6
-
-      - name: Build with Gradle
+      - name: Test with Gradle
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: test
 
-  push_to_registry:
+  push_to_docker_hub:
     needs: [build, test]
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
