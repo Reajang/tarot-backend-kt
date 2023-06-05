@@ -67,10 +67,11 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:$GITHUB_REF_NAME
+          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:"$GITHUB_REF_NAME"
 
   deploy:
     name: Deploy
+    needs: push_to_docker_hub
     runs-on: ubuntu-latest
     environment: production
 
