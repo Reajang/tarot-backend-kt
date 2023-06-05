@@ -1,11 +1,15 @@
 name: Publish Docker image release version and Deploy to Amazon ECS
 
 on:
-  release:
-    types: [ published ]
+#  release:
+#    types: [ published ]
+  push:
+    branches:
+      - master
 
 jobs:
   build_test_package:
+    name: Build, test and upload artifact
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -23,7 +27,7 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1.0.6
 
-      - name: Build with Gradle
+      - name: Build and test with Gradle
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: build test
@@ -67,19 +71,19 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:"$GITHUB_REF_NAME"
+          tags: "leonidgarin/astana-backend:latest", "leonidgarin/astana-backend:$GITHUB_REF_NAME"
 
-  deploy:
-    name: Deploy
-    needs: push_to_docker_hub
-    runs-on: ubuntu-latest
-    environment: production
-
-    steps:
-      - name: Run docker compose on EC2 via ssh
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ env.AWS_EC2_HOST }}
-          username: ${{ secrets.AWS_UBUNTU_USER }}
-          key: ${{ secrets.AWS_LOCAL_PK }}
-          script: sudo docker-compose up -d
+#  deploy:
+#    name: Deploy
+#    needs: push_to_docker_hub
+#    runs-on: ubuntu-latest
+#    environment: production
+#
+#    steps:
+#      - name: Run docker compose on EC2 via ssh
+#        uses: appleboy/ssh-action@v0.1.10
+#        with:
+#          host: ${{ env.AWS_EC2_HOST }}
+#          username: ${{ secrets.AWS_UBUNTU_USER }}
+#          key: ${{ secrets.AWS_LOCAL_PK }}
+#          script: sudo docker-compose up -d
