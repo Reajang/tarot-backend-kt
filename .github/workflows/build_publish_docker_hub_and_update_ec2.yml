@@ -1,9 +1,8 @@
 name: Publish Docker image release version and Deploy to Amazon ECS
 
-#on:
-#  release:
-#    types: [ published ]
-on: [ push ]
+on:
+  release:
+    types: [ published ]
 
 jobs:
   build_test_package:
@@ -69,19 +68,20 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
+#          github.ref_name is release tag
           tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:${{ github.ref_name }}
 
-#  deploy:
-#    name: Deploy
-#    needs: push_to_docker_hub
-#    runs-on: ubuntu-latest
-#    environment: production
-#
-#    steps:
-#      - name: Run docker compose on EC2 via ssh
-#        uses: appleboy/ssh-action@v0.1.10
-#        with:
-#          host: ${{ env.AWS_EC2_HOST }}
-#          username: ${{ secrets.AWS_UBUNTU_USER }}
-#          key: ${{ secrets.AWS_LOCAL_PK }}
-#          script: sudo docker-compose up -d
+  deploy:
+    name: Deploy
+    needs: push_to_docker_hub
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Run docker compose on EC2 via ssh
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ env.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_UBUNTU_USER }}
+          key: ${{ secrets.AWS_LOCAL_PK }}
+          script: sudo docker-compose up -d
