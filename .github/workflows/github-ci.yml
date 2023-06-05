@@ -87,6 +87,6 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: v3.2.5
+          tags: leonidgarin/astana-backend:v3.2.5
 #          tags: ${{ steps.meta.outputs.tags }}
 #          labels: ${{ steps.meta.outputs.labels }}
