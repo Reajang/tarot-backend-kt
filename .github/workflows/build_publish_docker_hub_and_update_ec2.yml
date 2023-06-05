@@ -1,11 +1,9 @@
 name: Publish Docker image release version and Deploy to Amazon ECS
 
-on:
+#on:
 #  release:
 #    types: [ published ]
-  push:
-    branches:
-      - master
+on: [ push ]
 
 jobs:
   build_test_package:
