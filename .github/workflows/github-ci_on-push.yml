@@ -24,13 +24,6 @@ jobs:
         with:
           arguments: build
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: tarot-backend-artifact
-          path: build/libs
-          retention-days: 1
-
   test:
     needs: build
     runs-on: ubuntu-latest
