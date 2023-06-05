@@ -69,17 +69,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-#      - name: Extract metadata (tags, labels) for Docker
-#        id: meta
-#        uses: docker/metadata-action@v4.4.0
-#        with:
-#          images: leonidgarin/astana-backend
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4.4.0
+        with:
+          images: leonidgarin/astana-backend
 
       - name: Download tarot-backend-artifact
         uses: actions/download-artifact@v3
         with:
-           name: tarot-backend-artifact
-           path: build/libs
+          name: tarot-backend-artifact
+          path: build/libs
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
@@ -87,6 +87,6 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: leonidgarin/astana-backend:v3.2.5
+          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:v3.2.6
 #          tags: ${{ steps.meta.outputs.tags }}
 #          labels: ${{ steps.meta.outputs.labels }}
