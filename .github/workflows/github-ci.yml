@@ -27,8 +27,9 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: Package
+          name: tarot-backend-artifact
           path: build/libs
+          retention-days: 1
 
   test:
     needs: build
@@ -73,6 +74,11 @@ jobs:
 #        uses: docker/metadata-action@v4.4.0
 #        with:
 #          images: leonidgarin/astana-backend
+
+      - name: Download tarot-backend-artifact
+        uses: actions/download-artifact@v3
+        with:
+           name: tarot-backend-artifact
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
