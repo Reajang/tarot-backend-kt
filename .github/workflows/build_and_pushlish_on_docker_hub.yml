@@ -67,6 +67,4 @@
 #          context: .
 #          file: ./docker/Dockerfile
 #          push: true
-#          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:v3.2.8
-#  #          tags: ${{ steps.meta.outputs.tags }}
-#  #          labels: ${{ steps.meta.outputs.labels }}
+#          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:$GITHUB_REF_NAME
