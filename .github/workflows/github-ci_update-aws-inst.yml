@@ -16,9 +16,9 @@ jobs:
       - name: Run docker compose
 #        uses: actions/checkout@v3
         env:
-          PRIVATE_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_ADMIN }}
+          PRIVATE_KEY: ${{ secrets.AWS_LOCAL_PK }}
           HOSTNAME: ${{env.AWS_EC2_HOST}}
-          USER_NAME: ${secrets.AWS_ACCESS_KEY_ID_ADMIN}
+          USER_NAME: ${secrets.AWS_UBUNTU_USER}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
