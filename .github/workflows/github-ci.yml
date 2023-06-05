@@ -79,6 +79,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
            name: tarot-backend-artifact
+           path: build/libs
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
