@@ -1,34 +1,22 @@
-name: Deploy to Amazon ECS
-
-on: [ push ]
-
-env:
-  AWS_REGION: eu-central-1
-  AWS_EC2_HOST: ec2-3-70-19-240.eu-central-1.compute.amazonaws.com
-
-jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment: production
-
-    steps:
-      - name: Run docker compose on EC2 via ssh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ env.AWS_EC2_HOST }}
-          username: ${{ secrets.AWS_UBUNTU_USER }}
-          key: ${{ secrets.AWS_LOCAL_PK }}
-          script: sudo docker-compose up -d
-#      - name: Run docker compose
-#        env:
-#          PRIVATE_KEY: ${{ secrets.AWS_LOCAL_PK }}
-#          HOSTNAME: ${{env.AWS_EC2_HOST}}
-#          USER_NAME: ${secrets.AWS_UBUNTU_USER}
-#        run: |
-#          echo "$PRIVATE_KEY" > local.pem && sudo chmod 400 local.pem
-#          sudo ssh -o StrictHostKeyChecking=no -i "local.pem" ${USER_NAME}@${HOSTNAME} '
+#name: Deploy to Amazon ECS
 #
-#           Now we have got the access of EC2 and we will start the deploy .
-#          sudo docker-compose up -d
-#          '
+#on: [ push ]
+#
+#env:
+#  AWS_REGION: eu-central-1
+#  AWS_EC2_HOST: ec2-3-70-19-240.eu-central-1.compute.amazonaws.com
+#
+#jobs:
+#  deploy:
+#    name: Deploy
+#    runs-on: ubuntu-latest
+#    environment: production
+#
+#    steps:
+#      - name: Run docker compose on EC2 via ssh
+#        uses: appleboy/ssh-action@v0.1.10
+#        with:
+#          host: ${{ env.AWS_EC2_HOST }}
+#          username: ${{ secrets.AWS_UBUNTU_USER }}
+#          key: ${{ secrets.AWS_LOCAL_PK }}
+#          script: sudo docker-compose up -d
