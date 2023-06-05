@@ -69,7 +69,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: "leonidgarin/astana-backend:latest", "leonidgarin/astana-backend:$GITHUB_REF_NAME"
+          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:${{ github.ref_name }}
 
 #  deploy:
 #    name: Deploy
