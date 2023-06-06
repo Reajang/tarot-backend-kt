@@ -7,26 +7,26 @@ server:
 
 spring:
   application:
-    name: AstanaTest
+    name: Tarot soothsayer
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/astana
+    url: jdbc:postgresql://localhost:5432/tarot
     username: postgres
     password: postgres
   flyway:
-    url: jdbc:postgresql://localhost:5432/astana
+    url: jdbc:postgresql://localhost:5432/tarot
     schemas: public
     user: postgres
     password: postgres
   kafka:
     bootstrap-servers: localhost:9093
     producer:
-      client-id: astana-service
-      #      transaction-id-prefix: astana-${hostname:localhost}
+      client-id: tarot-service
+      #      transaction-id-prefix: tarot-${hostname:localhost}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: astana-group-1
+      group-id: tarot-group-1
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -45,7 +45,7 @@ spring:
 
 
 kafka:
-  prefix: astana
+  prefix: tarot
   topic:
     tarot-events: ${kafka.prefix}_tarot_events
     job-events: ${kafka.prefix}_job_events

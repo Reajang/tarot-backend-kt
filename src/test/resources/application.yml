@@ -2,7 +2,7 @@ spring:
   main:
     lazy-initialization: true
   application:
-    name: AstanaTest
+    name: TarotTest
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${test.container.postgresql.jdbc.url}

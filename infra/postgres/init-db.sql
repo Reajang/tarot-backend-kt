@@ -1,1 +1,1 @@
-CREATE DATABASE astana;
+CREATE DATABASE tarot;

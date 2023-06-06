@@ -69,7 +69,7 @@ jobs:
           file: ./docker/Dockerfile
           push: true
 #          github.ref_name is release tag
-          tags: leonidgarin/astana-backend:latest, leonidgarin/astana-backend:${{ github.ref_name }}
+          tags: leonidgarin/tarot-backend:latest, leonidgarin/tarot-backend:${{ github.ref_name }}
 
   deploy:
     name: Deploy
