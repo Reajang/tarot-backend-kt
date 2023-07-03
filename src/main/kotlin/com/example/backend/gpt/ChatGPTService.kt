@@ -49,7 +49,6 @@ class ChatGPTService(
     @Value("\${gpt.api.temperature}")
     private lateinit var _temperature: String
 
-    @Throws(Exception::class)
     fun tarotMeChatGPT(request: TarotRequest): TarotResponse {
         LOGGER.info("Send tarot request to ChatGPT")
         val httpRequest = prepareHttpRequest(request)
@@ -82,7 +81,6 @@ class ChatGPTService(
         return TarotResponse(request.cards, gptResponse)
     }
 
-    @Throws(URISyntaxException::class)
     private fun prepareHttpRequest(request: TarotRequest): HttpRequest {
         return HttpRequest.newBuilder()
             .POST(HttpRequest.BodyPublishers.ofByteArray(prepareBody(request)))

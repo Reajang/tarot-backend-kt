@@ -1,6 +1,6 @@
 package com.example.backend.aop;
 
-import com.example.backend.helpers.YandexTranslateHelper;
+import com.example.backend.lang.YandexTranslateHelper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;

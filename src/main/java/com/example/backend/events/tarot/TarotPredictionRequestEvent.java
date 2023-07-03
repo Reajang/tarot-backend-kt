@@ -3,7 +3,7 @@ package com.example.backend.events.tarot;
 import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.events.Event;
 import com.example.backend.events.EventType;
-import com.example.backend.helpers.Language;
+import com.example.backend.lang.Language;
 import java.io.Serial;
 import java.util.List;
 import java.util.UUID;

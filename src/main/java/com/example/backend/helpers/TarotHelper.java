@@ -2,13 +2,13 @@ package com.example.backend.helpers;
 
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import com.example.backend.gpt.ChatGPTService;
+import com.example.backend.lang.Language;
+import com.example.backend.lang.YandexTranslateHelper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.backend.gpt.ChatGPTService;
 
 @Component
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class TarotHelper {
     private final YandexTranslateHelper yandexTranslateHelper;
 
     @Transactional
-    public TarotResponse futureTell(TarotRequest request) throws Exception {
+    public TarotResponse futureTell(TarotRequest request) {
         log.info("Try get prediction");
         TarotRequest translatedInEngRequest = translateRequestIfNecessary(request);
         TarotResponse tarotResponse = chatGPTHelper.tarotMeChatGPT(translatedInEngRequest);
@@ -27,8 +27,7 @@ public class TarotHelper {
         return translateResponseIfNecessary(request, tarotResponse);
     }
 
-    private TarotRequest translateRequestIfNecessary(TarotRequest request)
-        throws IOException, URISyntaxException, InterruptedException {
+    private TarotRequest translateRequestIfNecessary(TarotRequest request) {
         if (request.from() != Language.EN) {
             log.info("Tarot request should be translated from={} to{}", request.from(), request.to());
             String questionInEnglish = yandexTranslateHelper.translate(request.text(), request.from(), request.to());
@@ -37,8 +36,7 @@ public class TarotHelper {
         return request;
     }
 
-    private TarotResponse translateResponseIfNecessary(TarotRequest request, TarotResponse tarotResponse)
-        throws IOException, URISyntaxException, InterruptedException {
+    private TarotResponse translateResponseIfNecessary(TarotRequest request, TarotResponse tarotResponse) {
         if (request.from() != Language.EN) {
             log.info("Tarot response should be translated back from={} to{}", request.to(), request.from());
             String responseInEnglish = yandexTranslateHelper.translate(tarotResponse.text(), request.to(), request.from());
