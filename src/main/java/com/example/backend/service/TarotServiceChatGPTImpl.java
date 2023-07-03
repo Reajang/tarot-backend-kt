@@ -6,7 +6,7 @@ import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.events.publishers.TarotPublisher;
-import com.example.backend.helpers.TarotHelper;
+import com.example.backend.helper.TarotHelper;
 import com.example.backend.mapper.TarotCardMapper;
 import com.example.backend.repository.TarotCardRepository;
 import java.util.List;
@@ -40,7 +40,7 @@ public class TarotServiceChatGPTImpl implements TarotService {
 
     @Override
     @Transactional
-    public TarotResponse ask(TarotRequest request) throws Exception {
+    public TarotResponse ask(TarotRequest request) {
         return tarotHelper.futureTell(request);
     }
 
