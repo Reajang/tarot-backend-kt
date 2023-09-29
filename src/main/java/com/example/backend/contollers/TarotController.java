@@ -27,7 +27,7 @@ public class TarotController {
 
 
     @PostMapping("/question")
-    public TarotResponse ask(@RequestBody TarotRequest request) throws Exception {
+    public TarotResponse ask(@RequestBody TarotRequest request) {
         return tarotService.ask(request);
     }
 
@@ -35,7 +35,7 @@ public class TarotController {
      * @return Async Job id
      */
     @PostMapping("/question/async")
-    public UUID askAsync(@RequestBody TarotRequest request) throws Exception {
+    public UUID askAsync(@RequestBody TarotRequest request) {
         return tarotService.askAsync(request);
     }
 

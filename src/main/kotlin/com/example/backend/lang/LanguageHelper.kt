@@ -1,6 +1,6 @@
 package com.example.backend.lang
 
-import com.example.backend.utils.LOGGER
+import com.example.backend.utils.LANGUAGE_SERVICE_LOGGER
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.ObjectUtils
 import org.apache.commons.lang3.StringUtils
@@ -34,7 +34,7 @@ class YandexTranslateHelper(
     private lateinit var _apiKey: String
 
     fun translate(textToTranslate: String, sourceLanguage: Language, targetLanguage: Language): String {
-        LOGGER.info("Start translation via Yandex API test={}\nfrom={}\nto={}",
+        LANGUAGE_SERVICE_LOGGER.info("Start translation via Yandex API test={}\nfrom={}\nto={}",
             if (textToTranslate.length > 50) textToTranslate.substring(0, 50) + "..." else textToTranslate,
             sourceLanguage.code,
             targetLanguage.code
@@ -46,7 +46,7 @@ class YandexTranslateHelper(
 
         val jsonNode = objectMapper.readTree(httpResponse.body())
 
-        LOGGER.info("Response from Yandex API: {}", jsonNode)
+        LANGUAGE_SERVICE_LOGGER.info("Response from Yandex API: {}", jsonNode)
 
         val firstTranslation = jsonNode["translations"][0]
         return deleteYandexSystemParentheses(firstTranslation["text"].asText())!!
