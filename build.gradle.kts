@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 object DepVersions {
     const val KOTLIN = "1.8.22"
     const val KOTLIN_COROUTINES = "1.7.2"
-    const val JAVA = "19"
+    const val JAVA = "17"
 
     const val SPRING_BOOT = "3.1.1"
     const val SPRING = "6.1.1"
@@ -41,7 +41,7 @@ plugins {
 
 group = "com.tarot"
 version = "1.0-SNAPSHOT"
-//sourceCompatibility = "19"
+//sourceCompatibility = "17"
 
 //apply plugin: "maven-publish"
 

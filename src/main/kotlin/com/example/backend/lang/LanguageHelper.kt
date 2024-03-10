@@ -49,7 +49,7 @@ class YandexTranslateHelper(
         LANGUAGE_SERVICE_LOGGER.info("Response from Yandex API: {}", jsonNode)
 
         val firstTranslation = jsonNode["translations"][0]
-        return deleteYandexSystemParentheses(firstTranslation["text"].asText())!!
+        return deleteYandexSystemParentheses(firstTranslation["text"].asText())
 
     }
 
