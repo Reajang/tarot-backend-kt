@@ -1,19 +1,21 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object DepVersions {
-    const val KOTLIN = "1.8.22"
-    const val KOTLIN_COROUTINES = "1.7.2"
-    const val JAVA = "17"
+    const val KOTLIN = "2.0.21"
+    const val KOTLIN_COROUTINES = "1.9.0"
+    const val JAVA = "21"
 
-    const val SPRING_BOOT = "3.1.1"
+    const val SPRING_BOOT = "3.3.5"
     const val SPRING = "6.1.1"
     const val POSTGRES = "42.6.0"
+//    const val MONGO = "42.6.0"
 
     const val MAPSTRUCT = "1.5.5.Final"
-    const val LOMBOK = "1.18.28"
-    const val FLYWAY = "9.16.2"
-    const val KAFKA_SPRING = "3.0.8"
-    const val KAFKA_CLIENTS = "3.5.0"
+    const val LOMBOK = "1.18.32"
+    const val FLYWAY = "10.17.0"
+    const val MONGOCK = "5.2.4"
+    const val KAFKA_SPRING = "3.2.4"
+    const val KAFKA_CLIENTS = "3.7.0"
 
     const val TESTCONTAINERS = "1.18.3"
     const val MOCKITO_JUNIT_JUPITER = "5.3.1"
@@ -24,9 +26,9 @@ object DepVersions {
 
 plugins {
 //    plugins versions
-    val kotlinVersion = "1.9.10"
-    val flywayVersion = "9.16.2"
-    id("org.springframework.boot") version "3.1.1"
+    val kotlinVersion = "2.0.21"
+    val flywayVersion = "10.17.0"
+    id("org.springframework.boot") version "3.3.5"
 //    id "io.spring.dependency-management" version "1.1.0"
     id("org.flywaydb.flyway") version flywayVersion
 //    id("java")
@@ -52,6 +54,7 @@ kotlin {
 }
 
 java {
+    sourceCompatibility = JavaVersion.VERSION_21
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(DepVersions.JAVA))
     }
@@ -70,12 +73,19 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${DepVersions.KOTLIN_COROUTINES}")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-aop:${DepVersions.SPRING_BOOT}")
 //    implementation("org.springframework.boot:spring-boot-starter-security:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-web:${DepVersions.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter-actuator:${DepVersions.SPRING_BOOT}")
+
     implementation("org.flywaydb:flyway-core:${DepVersions.FLYWAY}")
+
+    implementation("io.mongock:mongock-springboot:${DepVersions.MONGOCK}")
+    implementation("io.mongock:mongock-springboot-v3:${DepVersions.MONGOCK}")
+    implementation("io.mongock:mongodb-springdata-v4-driver:${DepVersions.MONGOCK}")
+
     implementation("org.mapstruct:mapstruct:${DepVersions.MAPSTRUCT}")
 
     implementation("org.springframework.kafka:spring-kafka:${DepVersions.KAFKA_SPRING}")
@@ -102,6 +112,17 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:${DepVersions.TESTCONTAINERS}")
     testImplementation("org.springframework.kafka:spring-kafka-test:${DepVersions.KAFKA_SPRING}")
     testImplementation("org.mockito:mockito-junit-jupiter:${DepVersions.MOCKITO_JUNIT_JUPITER}")
+
+//    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${DepVersions.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:${DepVersions.SPRING_BOOT}")
+
+//    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-graphql:${DepVersions.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:${DepVersions.SPRING_BOOT}")
+//    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+//    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+//    implementation("org.jetbrains.kotlin:kotlin-reflect")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 //    }
 //        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
 //    testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -116,8 +137,15 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = DepVersions.JAVA
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
+        jvmTarget = "21"
     }
 }
+
+//tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
+//    compilerOptions {
+//        freeCompilerArgs.add("-Xexport-kdoc")
+//    }
+//}
 
 //application {
 //    mainClass.set("MainKt")

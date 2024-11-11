@@ -1,33 +1,26 @@
 package com.example.backend.domain.system;
 
 
-import com.example.backend.domain.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
-@Entity(name = "job_result")
+import java.time.Instant;
+import java.util.UUID;
+
 @Data
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobResult extends BaseEntity {
+public class JobResult {
 
-    @ManyToOne()
-    @JoinColumn(name = "job_id")
-    private Job job;
+    private UUID id;
 
-    @Column(name = "data")
+    private Instant createDate;
+
+    private Instant updateDate;
+
     private String data;
 
-    @Column(name = "type")
     private String type;
 
 

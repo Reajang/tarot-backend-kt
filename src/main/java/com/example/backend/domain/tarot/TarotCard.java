@@ -1,17 +1,15 @@
 package com.example.backend.domain.tarot;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity(name = "tarot_card")
+import java.util.UUID;
+
+@Document
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,25 +17,17 @@ import lombok.NoArgsConstructor;
 public class TarotCard {
 
     @Id
-    @Column(name = "id")
     private UUID id;
 
-    @ManyToOne()
-    @JoinColumn(name = "card_type_id")
     private TarotCardType cardType;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "reversed_description")
     private String reversedDescription;
 
-    @Column(name = "advice")
     private String advice;
 
-    @Column(name = "image_id")
     private UUID imageId;
 }

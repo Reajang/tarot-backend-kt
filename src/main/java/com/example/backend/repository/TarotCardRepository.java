@@ -1,9 +1,13 @@
 package com.example.backend.repository;
 
 import com.example.backend.domain.tarot.TarotCard;
-import java.util.UUID;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TarotCardRepository extends JpaRepository<TarotCard, UUID> {
+import java.util.UUID;
+
+@Repository
+public interface TarotCardRepository extends MongoRepository<TarotCard, UUID>
+{
 
 }

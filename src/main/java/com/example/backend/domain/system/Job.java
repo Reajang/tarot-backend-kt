@@ -1,44 +1,37 @@
 package com.example.backend.domain.system;
 
-import com.example.backend.domain.BaseEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity(name = "job")
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
+@Document
 @Data
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class Job extends BaseEntity {
+public class Job  {
 
-    @Column(name = "type")
-    @Enumerated(value = EnumType.STRING)
+    @Id
+    protected UUID id;
+
+    protected Instant createDate;
+
+    protected Instant updateDate;
+
     private JobType type;
 
-    @Column(name = "status")
-    @Enumerated(value = EnumType.STRING)
     private JobStatus status;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     private List<JobResult> results;
 
-    @Transient
     public static Job newIdle(JobType jobType) {
         Job newJob = new Job();
         newJob.setId(UUID.randomUUID());

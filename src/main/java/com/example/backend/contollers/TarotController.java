@@ -1,5 +1,6 @@
 package com.example.backend.contollers;
 
+import com.example.backend.domain.tarot.TarotCard;
 import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
@@ -21,7 +22,7 @@ public class TarotController {
     private final TarotService tarotService;
 
     @GetMapping("/cards")
-    public List<TarotCardDto> allCards() {
+    public List<TarotCard> allCards() {
         return tarotService.getAllCards();
     }
 

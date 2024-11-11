@@ -7,7 +7,7 @@ import com.example.backend.dto.system.JobResultDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+//@Mapper
 public interface JobMapper {
 
     JobMapper INSTANCE = Mappers.getMapper(JobMapper.class);

@@ -13,9 +13,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(
-    builder = @Builder(disableBuilder = true)
-)
+//@Mapper(
+//    builder = @Builder(disableBuilder = true)
+//)
 public interface TarotCardMapper {
 
     TarotCardMapper INSTANCE = Mappers.getMapper(TarotCardMapper.class);

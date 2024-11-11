@@ -8,16 +8,19 @@ server:
 spring:
   application:
     name: Tarot soothsayer
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tarot
-    username: postgres
-    password: postgres
-  flyway:
-    url: jdbc:postgresql://localhost:5432/tarot
-    schemas: public
-    user: postgres
-    password: postgres
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/tarot
+#    username: postgres
+#    password: postgres
+#  flyway:
+#    url: jdbc:mongodb://localhost:27017/tarot
+#    schemas: public
+#    user: root
+#    password: mongopw
+#    sql-migration-suffixes: ['.js']
+#    enabled: true
+#    driver-class-name:
   kafka:
     bootstrap-servers: localhost:9093
     producer:
@@ -42,6 +45,19 @@ spring:
       max-poll-records: 10
     listener:
       concurrency: 1
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: tarot
+      username: root
+      password: mongopw
+      authentication-database: admin
+
+mongock:
+  enabled: true
+  migration-scan-package:
+    - com.example.backend.dbmigration
 
 
 kafka:
