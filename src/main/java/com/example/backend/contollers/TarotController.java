@@ -1,18 +1,14 @@
 package com.example.backend.contollers;
 
-import com.example.backend.domain.tarot.TarotCard;
 import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.service.TarotService;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tarot")
@@ -22,7 +18,7 @@ public class TarotController {
     private final TarotService tarotService;
 
     @GetMapping("/cards")
-    public List<TarotCard> allCards() {
+    public List<TarotCardDto> allCards() {
         return tarotService.getAllCards();
     }
 

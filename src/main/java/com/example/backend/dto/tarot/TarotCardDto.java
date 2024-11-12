@@ -3,7 +3,7 @@ package com.example.backend.dto.tarot;
 import java.util.UUID;
 
 public record TarotCardDto(UUID id,
-                           TarotCardTypeDto cardType,
+                           TarotCardType cardType,
                            String name,
                            String description,
                            String reversedDescription,

@@ -1,5 +1,6 @@
 package com.example.backend.domain.tarot;
 
+import com.example.backend.dto.tarot.TarotCardType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

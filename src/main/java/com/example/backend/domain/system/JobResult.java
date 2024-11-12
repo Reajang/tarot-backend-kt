@@ -17,8 +17,6 @@ public class JobResult {
 
     private Instant createDate;
 
-    private Instant updateDate;
-
     private String data;
 
     private String type;

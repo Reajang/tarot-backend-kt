@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.kafka.common.serialization.UUIDDeserializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,7 +116,7 @@ public class JobServiceImpl implements JobService {
         Job job = optionalJob.get();
         List<JobResult> jobResults = errorsInfo.stream()
             .filter(Objects::nonNull)
-            .map(errorText -> new JobResult(UUID.randomUUID(), Instant.now(), Instant.now(), errorText.toString(), "text"))
+            .map(errorText -> new JobResult(UUID.randomUUID(), Instant.now(), errorText.toString(), "text"))
             .collect(Collectors.toList());
         job.setStatus(JobStatus.ERROR);
         job.setResults(jobResults);

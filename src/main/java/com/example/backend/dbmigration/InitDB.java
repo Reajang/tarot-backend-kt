@@ -1,8 +1,7 @@
 package com.example.backend.dbmigration;
 
 import com.example.backend.domain.tarot.TarotCard;
-import com.example.backend.domain.tarot.TarotCardType;
-import com.example.backend.repository.TarotCardRepository;
+import com.example.backend.dto.tarot.TarotCardType;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;

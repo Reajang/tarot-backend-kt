@@ -1,9 +1,7 @@
 package com.example.backend.mapper;
 
 import com.example.backend.domain.tarot.TarotCard;
-import com.example.backend.domain.tarot.TarotCardType;
 import com.example.backend.dto.tarot.TarotCardDto;
-import com.example.backend.dto.tarot.TarotCardTypeDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
 import com.example.backend.events.tarot.TarotPredictionRequestEvent;
@@ -13,9 +11,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-//@Mapper(
-//    builder = @Builder(disableBuilder = true)
-//)
+@Mapper(
+    builder = @Builder(disableBuilder = true)
+)
 public interface TarotCardMapper {
 
     TarotCardMapper INSTANCE = Mappers.getMapper(TarotCardMapper.class);
@@ -29,8 +27,6 @@ public interface TarotCardMapper {
     @Mapping(target = "reversed", source = "reversed")
     @Mapping(target = "imageId", source = "domain.imageId")
     TarotCardDto map(TarotCard domain, boolean reversed);
-
-    TarotCardTypeDto mapType(TarotCardType type);
 
     @Mapping(target = "jobId", ignore = true)
     @Mapping(target = "id", ignore = true)

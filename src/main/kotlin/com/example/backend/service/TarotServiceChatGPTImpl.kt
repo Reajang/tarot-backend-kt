@@ -8,7 +8,6 @@ import com.example.backend.dto.tarot.TarotResponse
 import com.example.backend.events.publishers.TarotPublisher
 import com.example.backend.helper.TarotHelper
 import com.example.backend.mapper.TarotCardMapper
-import com.example.backend.repository.CardReactiveRepository
 import com.example.backend.repository.TarotCardRepository
 import lombok.AllArgsConstructor
 import org.springframework.stereotype.Service
@@ -28,9 +27,15 @@ class TarotServiceChatGPTImpl(
     private val randomizer = Random(31)
 
     @Transactional(readOnly = true)
-    override fun getAllCards(): List<TarotCard?>? {
+    override fun getAllCards(): List<TarotCardDto> {
         return repository.findAll()
             .stream()
+            .map { card: TarotCard? ->
+                TarotCardMapper.INSTANCE.map(
+                    card,
+                    randomizer.nextBoolean()
+                )
+            }
             .collect(Collectors.toList())
     }
 
@@ -46,7 +51,8 @@ class TarotServiceChatGPTImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun randomOne(): TarotCardDto? {
+    override fun randomOne(): TarotCardDto {
+        // TODO there is no ability to updates cards. It's better so store it in the memory and do not call repository everytime
         val tarotCards = repository.findAll()
         val cardIndex = randomizer.nextInt(tarotCards.size)
         val isCardReversed = randomizer.nextBoolean()
