@@ -86,3 +86,7 @@ yandex:
       auth:
         type: Api-Key
         apikey:
+
+recreate:
+  migration:
+    sql-to-json: true

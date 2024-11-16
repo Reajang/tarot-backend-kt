@@ -18,7 +18,7 @@ public class TarotCardMapperTest {
     void mapToDtoTest() {
         TarotCard card = new TarotCard(
             UUID.randomUUID(),
-            new TarotCardType(UUID.randomUUID(), "test", "test desc"),
+            new TarotCardType( "test", "test desc"),
             "test name",
             "test card desc",
             "test reversed desc",
@@ -30,7 +30,6 @@ public class TarotCardMapperTest {
 
         assertNotNull(result);
         assertEquals(card.getId(), result.id());
-        assertEquals(card.getCardType().id(), result.cardType().id());
         assertEquals(card.getCardType().name(), result.cardType().name());
         assertEquals(card.getCardType().description(), result.cardType().description());
         assertEquals(card.getName(), result.name());

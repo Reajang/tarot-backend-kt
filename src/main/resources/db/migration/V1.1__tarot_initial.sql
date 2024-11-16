@@ -11,11 +11,11 @@ VALUES ('b2108b4f-a59a-426a-baad-4121c7c0cef2', 'Major Arcana',
        ('0bc5eadd-ca5e-4cef-adb5-0f44ad40c383', 'The Wands',
         'The Wands cards are about action, initiative, and invention. They help to guide how you move through your life, advising when to move and when to hold back'),
        ('3a6fc216-f492-4fc8-b185-7119ea84f3cc', 'The Cups',
-        'The Cups cards represent your emotions, intuition, and relationships. They can guide you in love and help you understand and process your highest and lowest feelings.'),
+        'The Cups cards represent your emotions, intuition, and relationships. They can guide you in love and help you understand and process your highest and lowest feelings'),
        ('2e3ff09c-2ecf-4f48-b754-eba46e953160', 'The Swords',
-        'The Swords cards are all about challenges. They can tell you when conflict and heartache are looming and help you harness the strength of your own mind.'),
+        'The Swords cards are all about challenges. They can tell you when conflict and heartache are looming and help you harness the strength of your own mind'),
        ('22b1d652-5f5e-4987-81f6-b0785060a1b5', 'The Pentacles',
-        'The Pentacles cards are associated with your work, finances, and domestic life. They can answer questions about your personal goals and your money, family, and health.');
+        'The Pentacles cards are associated with your work, finances, and domestic life. They can answer questions about your personal goals and your money, family, and health');
 
 
 
