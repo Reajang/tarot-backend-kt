@@ -37,7 +37,7 @@ class JobServiceImpl(
     override fun get(jobId: UUID): JobDto {
         return repository.findById(jobId).map { domain: Job ->
             JobMapper.INSTANCE.map(domain)
-        }.orElseThrow { ResourceNotFound(Job::class.simpleName, jobId.toString()) }
+        }.orElseThrow { ResourceNotFound(Job::class.simpleName!!, jobId.toString()) }
     }
 
     @Transactional
@@ -55,7 +55,7 @@ class JobServiceImpl(
     override fun update(jobId: UUID, newStatus: JobStatus, results: List<Any>) {
         val optionalJob = repository.findById(jobId)
         if (optionalJob.isEmpty) {
-            throw ResourceNotFound(Job::class.simpleName, jobId.toString())
+            throw ResourceNotFound(Job::class.simpleName!!, jobId.toString())
         }
         val job = optionalJob.get()
 
