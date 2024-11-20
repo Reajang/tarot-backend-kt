@@ -33,9 +33,9 @@ class YandexTranslateHelper(
     @Value("\${yandex.api.translate.auth.apikey}")
     private lateinit var _apiKey: String
 
-    fun translate(textToTranslate: String, sourceLanguage: Language, targetLanguage: Language): String {
+    fun translate(textToTranslate: String?, sourceLanguage: Language, targetLanguage: Language): String {
         LANGUAGE_SERVICE_LOGGER.info("Start translation via Yandex API test={}\nfrom={}\nto={}",
-            if (textToTranslate.length > 50) textToTranslate.substring(0, 50) + "..." else textToTranslate,
+            if (textToTranslate!!.length > 50) textToTranslate.substring(0, 50) + "..." else textToTranslate,
             sourceLanguage.code,
             targetLanguage.code
             )

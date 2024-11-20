@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import java.util.stream.Collectors
 
 @Service
 @AllArgsConstructor
@@ -29,14 +28,12 @@ class TarotServiceChatGPTImpl(
     @Transactional(readOnly = true)
     override fun getAllCards(): List<TarotCardDto> {
         return repository.findAll()
-            .stream()
             .map { card: TarotCard? ->
                 TarotCardMapper.INSTANCE.map(
                     card,
                     randomizer.nextBoolean()
                 )
             }
-            .collect(Collectors.toList())
     }
 
     @Transactional

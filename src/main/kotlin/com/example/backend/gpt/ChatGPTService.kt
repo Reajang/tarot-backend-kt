@@ -77,7 +77,7 @@ class ChatGPTService(
                 )
             }
             .joinToString("\n")
-        return TarotResponse(request.cards, gptResponse)
+        return TarotResponse(request.cards!!, gptResponse)
     }
 
     private fun prepareHttpRequest(request: TarotRequest): HttpRequest {
@@ -105,9 +105,9 @@ class ChatGPTService(
     }
 
     private fun prepareQuestion(request: TarotRequest): String {
-        val cards = request.cards.asSequence()
-            .map { card: TarotCardDto -> if (card.reversed) card.name + " (reversed)" else card.name }
-            .joinToString(", ")
+        val cards = request.cards?.asSequence()
+            ?.map { card: TarotCardDto? -> if (card?.reversed!!) card.name + " (reversed)" else card.name }
+            ?.joinToString(", ")
         return String.format(TAROT_DEFAULT_TEMPLATE_LONG, request.text, cards)
     }
 }

@@ -27,7 +27,7 @@ class TarotHelper(
     private fun translateRequestIfNecessary(request: TarotRequest): TarotRequest {
         if (request.from !== Language.EN) {
             TAROT_SERVICE_LOGGER.info("Tarot request should be translated from={} to{}", request.from, request.to)
-            val questionInEnglish = yandexTranslateHelper.translate(request.text, request.from, request.to)
+            val questionInEnglish = yandexTranslateHelper.translate(request.text, request.from!!, request.to!!)
             return TarotRequest(request.cards, questionInEnglish, request.from, request.to)
         }
         return request
@@ -36,7 +36,7 @@ class TarotHelper(
     private fun translateResponseIfNecessary(request: TarotRequest, tarotResponse: TarotResponse): TarotResponse {
         if (request.from !== Language.EN) {
             TAROT_SERVICE_LOGGER.info("Tarot response should be translated back from={} to{}", request.to, request.from)
-            val responseInEnglish = yandexTranslateHelper.translate(tarotResponse.text, request.to, request.from)
+            val responseInEnglish = yandexTranslateHelper.translate(tarotResponse.text, request.to!!, request.from!!)
             return TarotResponse(tarotResponse.cards, responseInEnglish, request.to, request.from)
         }
         return tarotResponse
