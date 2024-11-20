@@ -2,8 +2,8 @@ package com.example.backend.service
 
 import com.example.backend.documents.Job
 import com.example.backend.documents.JobResult
-import com.example.backend.domain.system.JobStatus
-import com.example.backend.domain.system.JobType
+import com.example.backend.documents.JobStatus
+import com.example.backend.documents.JobType
 import com.example.backend.dto.system.JobDto
 import com.example.backend.exceptions.ResourceNotFound
 import com.example.backend.mapper.JobMapper
@@ -12,7 +12,6 @@ import com.example.backend.utils.LOGGER
 import com.example.backend.utils.newIdleJob
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import mu.KotlinLogging
 import org.apache.commons.lang3.ObjectUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation

@@ -1,7 +1,8 @@
 package com.example.backend.dto.system;
 
-import com.example.backend.domain.system.JobStatus;
-import com.example.backend.domain.system.JobType;
+import com.example.backend.documents.JobStatus;
+import com.example.backend.documents.JobType;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

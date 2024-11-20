@@ -1,6 +1,6 @@
 package com.example.backend.events.listeners;
 
-import com.example.backend.domain.system.JobStatus;
+import com.example.backend.documents.JobStatus;
 import com.example.backend.events.Event;
 import com.example.backend.events.job.UpdateJobStatusEvent;
 import com.example.backend.service.JobService;

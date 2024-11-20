@@ -1,12 +1,11 @@
 package com.example.backend.utils
 
 import com.example.backend.documents.Job
-import com.example.backend.domain.system.JobStatus
-import com.example.backend.domain.system.JobType
+import com.example.backend.documents.JobStatus
+import com.example.backend.documents.JobType
 import com.example.backend.gpt.ChatGPTService
 import com.example.backend.helper.TarotHelper
 import com.example.backend.lang.YandexTranslateHelper
-import com.example.backend.service.JobServiceImpl
 import mu.KotlinLogging
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

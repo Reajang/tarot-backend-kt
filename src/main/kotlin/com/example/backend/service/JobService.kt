@@ -1,7 +1,7 @@
 package com.example.backend.service
 
-import com.example.backend.domain.system.JobStatus
-import com.example.backend.domain.system.JobType
+import com.example.backend.documents.JobStatus
+import com.example.backend.documents.JobType
 import com.example.backend.dto.system.JobDto
 import java.util.*
 

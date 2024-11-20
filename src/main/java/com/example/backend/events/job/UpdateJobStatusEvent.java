@@ -1,6 +1,6 @@
 package com.example.backend.events.job;
 
-import com.example.backend.domain.system.JobStatus;
+import com.example.backend.documents.JobStatus;
 import com.example.backend.events.Event;
 import com.example.backend.events.EventType;
 import java.io.Serial;

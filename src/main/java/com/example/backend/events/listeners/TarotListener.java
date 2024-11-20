@@ -1,6 +1,6 @@
 package com.example.backend.events.listeners;
 
-import com.example.backend.domain.system.JobStatus;
+import com.example.backend.documents.JobStatus;
 import com.example.backend.dto.system.JobDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;
