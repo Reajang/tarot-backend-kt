@@ -1,6 +1,6 @@
 package com.example.backend.dbmigration;
 
-import com.example.backend.domain.tarot.TarotCard;
+import com.example.backend.documents.TarotCard;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mongock.api.annotations.*;

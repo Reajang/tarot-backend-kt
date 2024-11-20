@@ -1,7 +1,7 @@
 package com.example.backend.service
 
 import com.example.backend.documents.JobType
-import com.example.backend.domain.tarot.TarotCard
+import com.example.backend.documents.TarotCard
 import com.example.backend.dto.tarot.TarotCardDto
 import com.example.backend.dto.tarot.TarotRequest
 import com.example.backend.dto.tarot.TarotResponse

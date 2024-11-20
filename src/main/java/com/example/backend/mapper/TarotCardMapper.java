@@ -1,6 +1,6 @@
 package com.example.backend.mapper;
 
-import com.example.backend.domain.tarot.TarotCard;
+import com.example.backend.documents.TarotCard;
 import com.example.backend.dto.tarot.TarotCardDto;
 import com.example.backend.dto.tarot.TarotRequest;
 import com.example.backend.dto.tarot.TarotResponse;

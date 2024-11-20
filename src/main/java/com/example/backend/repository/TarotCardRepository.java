@@ -1,6 +1,6 @@
 package com.example.backend.repository;
 
-import com.example.backend.domain.tarot.TarotCard;
+import com.example.backend.documents.TarotCard;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

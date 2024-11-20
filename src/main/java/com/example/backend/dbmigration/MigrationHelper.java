@@ -1,6 +1,6 @@
 package com.example.backend.dbmigration;
 
-import com.example.backend.domain.tarot.TarotCard;
+import com.example.backend.documents.TarotCard;
 import com.example.backend.dto.tarot.TarotCardType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
