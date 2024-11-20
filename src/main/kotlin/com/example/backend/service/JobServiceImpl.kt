@@ -7,7 +7,7 @@ import com.example.backend.documents.JobType
 import com.example.backend.dto.system.JobDto
 import com.example.backend.exceptions.ResourceNotFound
 import com.example.backend.mapper.JobMapper
-import com.example.backend.repository.JobRepository
+import com.example.backend.repos.JobRepository
 import com.example.backend.utils.LOGGER
 import com.example.backend.utils.newIdleJob
 import com.fasterxml.jackson.core.JsonProcessingException

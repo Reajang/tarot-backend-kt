@@ -8,7 +8,7 @@ import com.example.backend.dto.tarot.TarotResponse
 import com.example.backend.events.publishers.TarotPublisher
 import com.example.backend.helper.TarotHelper
 import com.example.backend.mapper.TarotCardMapper
-import com.example.backend.repository.TarotCardRepository
+import com.example.backend.repos.TarotCardRepository
 import lombok.AllArgsConstructor
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
