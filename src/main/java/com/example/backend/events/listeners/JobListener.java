@@ -26,7 +26,7 @@ public class JobListener {
         if (CollectionUtils.isEmpty(event.getResults())) {
             jobService.update(event.getJodId(), event.getNewStatus());
         } else if (event.getNewStatus() == JobStatus.ERROR) {
-            jobService.setErrorsAsStrings(event.getJodId(), event.getResults());
+            jobService.setErrors(event.getJodId(), event.getResults());
         } else {
             jobService.update(event.getJodId(), event.getNewStatus(), event.getResults());
         }

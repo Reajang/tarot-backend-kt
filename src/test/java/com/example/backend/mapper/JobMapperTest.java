@@ -1,17 +1,5 @@
 package com.example.backend.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.example.backend.domain.system.Job;
-import com.example.backend.domain.system.JobResult;
-import com.example.backend.domain.system.JobStatus;
-import com.example.backend.domain.system.JobType;
-import com.example.backend.dto.system.JobDto;
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
-import org.junit.jupiter.api.Test;
-
 public class JobMapperTest {
 
 //    @Test

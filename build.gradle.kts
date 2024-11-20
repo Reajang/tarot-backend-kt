@@ -22,6 +22,7 @@ object DepVersions {
 
     const val APACHE_COMMON_COLLECTIONS_4 = "4.0"
     const val APACHE_COMMON_LANG_3 = "3.3"
+    const val KOTLIN_LOGGING = "2.0.11"
 }
 
 plugins {
@@ -73,6 +74,9 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${DepVersions.KOTLIN_COROUTINES}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${DepVersions.KOTLIN}")
+    implementation("io.github.microutils:kotlin-logging-jvm:${DepVersions.KOTLIN_LOGGING}")
+
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-aop:${DepVersions.SPRING_BOOT}")
@@ -93,6 +97,7 @@ dependencies {
 
     implementation("org.apache.commons:commons-collections4:${DepVersions.APACHE_COMMON_COLLECTIONS_4}")
     implementation("org.apache.commons:commons-lang3:${DepVersions.APACHE_COMMON_LANG_3}")
+
 
     compileOnly("org.projectlombok:lombok:${DepVersions.LOMBOK}")
     compileOnly ("org.springframework.boot:spring-boot-devtools:${DepVersions.SPRING_BOOT}")
@@ -121,7 +126,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux:${DepVersions.SPRING_BOOT}")
 //    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 //    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-//    implementation("org.jetbrains.kotlin:kotlin-reflect")
 //    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 //    }
 //        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
