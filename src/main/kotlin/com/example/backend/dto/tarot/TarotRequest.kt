@@ -4,13 +4,11 @@ import com.example.backend.dto.common.Translatable
 import com.example.backend.lang.Language
 
 data class TarotRequest(
-    var cards: List<TarotCardDto>?,
-    var text: String?,
-    var from: Language?,
-    var to: Language?
+    var cards: List<TarotCardDto>? = null,
+    var text: String? = null,
+    var from: Language? = null,
+    var to: Language? = null
 ) : Translatable {
-
-    constructor() : this(null, null, null, null)
 
     override fun from(): Language? {
         return from
