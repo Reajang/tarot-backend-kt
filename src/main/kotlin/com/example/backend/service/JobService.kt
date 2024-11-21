@@ -9,12 +9,12 @@ interface JobService {
 
     fun createNew(jobType: JobType): UUID
 
-    fun get(jobId: UUID): JobDto
+    fun get(jobId: UUID): JobDto?
 
-    fun update(jobId: UUID, newStatus: JobStatus)
+    fun update(jobId: UUID, newStatus: JobStatus?)
 
-    fun update(jobId: UUID, newStatus: JobStatus, results: List<Any>)
+    fun update(jobId: UUID, newStatus: JobStatus?, results: List<Any?>?)
 
-    fun setErrors(jobId: UUID, errorsInfo: List<Any>)
+    fun setErrors(jobId: UUID, errorsInfo: List<Any?>?)
 
 }

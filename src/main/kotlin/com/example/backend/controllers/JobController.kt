@@ -13,7 +13,7 @@ import java.util.*
 class JobController(private val service: JobService) {
 
     @GetMapping("/get/{jobId}")
-    fun getJob(@PathVariable jobId: UUID?): JobDto {
+    fun getJob(@PathVariable jobId: UUID?): JobDto? {
         return service.get(jobId!!)
     }
 }
