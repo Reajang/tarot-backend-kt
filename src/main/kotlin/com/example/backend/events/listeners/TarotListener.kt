@@ -21,6 +21,7 @@ class TarotListener(
     private val jobPublisher: JobPublisher,
     private val jobService: JobService,
     private val tarotPublisher: TarotPublisher,
+    private val tarotCardMapper: TarotCardMapper,
 ) {
 
     @KafkaHandler
@@ -28,7 +29,7 @@ class TarotListener(
         LOGGER.info { "Received event $event" }
 
         val jobId = event.jobId
-        val tarotRequest = TarotCardMapper.INSTANCE.map(event)
+        val tarotRequest = tarotCardMapper.map(event)
         LOGGER.info { "Start async future telling for jobId=$jobId. TarotRequest=$tarotRequest" }
 
         val job = jobService.get(jobId!!)
@@ -40,7 +41,7 @@ class TarotListener(
         jobPublisher.publishUpdateJobStatusEvent(event.jobId, JobStatus.RUNNING)
 
         try {
-            val tarotResponse = tarotHelper.futureTell(tarotRequest)
+            val tarotResponse = tarotHelper.futureTell(tarotRequest!!)
             jobPublisher.publishUpdateJobStatusEvent(event.jobId, JobStatus.COMPLETE, listOf(tarotResponse))
             //            tarotPublisher.publishTarotPredictionResponseEvent(tarotResponse, jobId);
         } catch (e: Exception) {

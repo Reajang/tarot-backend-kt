@@ -12,7 +12,7 @@ import java.util.*
 class TarotController(private val tarotService: TarotService) {
 
     @GetMapping("/cards")
-    fun allCards(): List<TarotCardDto> {
+    fun allCards(): List<TarotCardDto?> {
         return tarotService.getAllCards()
     }
 
@@ -32,7 +32,7 @@ class TarotController(private val tarotService: TarotService) {
 
 
     @GetMapping("/take-a-try")
-    fun takeATry(): TarotCardDto {
+    fun takeATry(): TarotCardDto? {
         return tarotService.randomOne()
     }
 }

@@ -22,8 +22,9 @@ import java.util.*
 
 @Service
 class JobServiceImpl(
-    val repository: JobRepository,
-    val objectMapper: ObjectMapper
+    private val repository: JobRepository,
+    private val objectMapper: ObjectMapper,
+    private val jobMapper: JobMapper,
 ) : JobService {
 
 
@@ -37,7 +38,7 @@ class JobServiceImpl(
     override fun get(jobId: UUID): JobDto? {
         return repository.findById(jobId)
             .map { domain: Job ->
-                JobMapper.INSTANCE.map(domain)
+                jobMapper.map(domain)
             }
             .orElseThrow { ResourceNotFound(Job::class.simpleName!!, jobId.toString()) }
     }

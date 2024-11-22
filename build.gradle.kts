@@ -37,7 +37,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
-//    kotlin("kapt") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
 //    kotlin("plugin.lombok") version kotlinVersion
 //    application
 }
@@ -51,6 +51,14 @@ version = "1.0-SNAPSHOT"
 kotlin {
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(DepVersions.JAVA))
+    }
+}
+
+kapt {
+    keepJavacAnnotationProcessors = true
+    arguments {
+        arg("mapstruct.defaultComponentModel", "spring")
+        arg("mapstruct.unmappedTargetPolicy", "IGNORE")
     }
 }
 
@@ -104,8 +112,9 @@ dependencies {
 
     runtimeOnly("org.postgresql:postgresql:${DepVersions.POSTGRES}")
 
+    kapt("org.mapstruct:mapstruct-processor:${DepVersions.MAPSTRUCT}")
+
     annotationProcessor("org.projectlombok:lombok:${DepVersions.LOMBOK}")
-    annotationProcessor("org.mapstruct:mapstruct-processor:${DepVersions.MAPSTRUCT}")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${DepVersions.SPRING_BOOT}")
 
     testImplementation(kotlin("test"))

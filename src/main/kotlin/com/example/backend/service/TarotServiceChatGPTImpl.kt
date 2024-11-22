@@ -17,22 +17,20 @@ import java.util.*
 @Service
 @AllArgsConstructor
 class TarotServiceChatGPTImpl(
-    val repository: TarotCardRepository,
-    val jobService: JobService,
-    val tarotHelper: TarotHelper,
-    val tarotPublisher: TarotPublisher
+    private val repository: TarotCardRepository,
+    private val jobService: JobService,
+    private val tarotHelper: TarotHelper,
+    private val tarotPublisher: TarotPublisher,
+    private val tarotMapper: TarotCardMapper,
 ) : TarotService {
 
     private val randomizer = Random(31)
 
     @Transactional(readOnly = true)
-    override fun getAllCards(): List<TarotCardDto> {
+    override fun getAllCards(): List<TarotCardDto?> {
         return repository.findAll()
             .map { card: TarotCard? ->
-                TarotCardMapper.INSTANCE.map(
-                    card,
-                    randomizer.nextBoolean()
-                )
+                tarotMapper.map(card, randomizer.nextBoolean())
             }
     }
 
@@ -48,12 +46,12 @@ class TarotServiceChatGPTImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun randomOne(): TarotCardDto {
+    override fun randomOne(): TarotCardDto? {
         // TODO there is no ability to updates cards. It's better so store it in the memory and do not call repository everytime
         val tarotCards = repository.findAll()
         val cardIndex = randomizer.nextInt(tarotCards.size)
         val isCardReversed = randomizer.nextBoolean()
-        return TarotCardMapper.INSTANCE.map(tarotCards[cardIndex], isCardReversed)
+        return tarotMapper.map(tarotCards[cardIndex], isCardReversed)
 
     }
 }

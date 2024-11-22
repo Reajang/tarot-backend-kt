@@ -7,11 +7,11 @@ import java.util.*
 
 interface TarotService {
 
-    fun getAllCards(): List<TarotCardDto>
+    fun getAllCards(): List<TarotCardDto?>
 
     fun ask(request: TarotRequest?): TarotResponse?
 
     fun askAsync(request: TarotRequest?): UUID?
 
-    fun randomOne(): TarotCardDto
+    fun randomOne(): TarotCardDto?
 }
