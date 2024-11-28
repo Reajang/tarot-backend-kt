@@ -1,20 +1,29 @@
 spring:
   main:
     lazy-initialization: true
+    web-application-type: reactive
   application:
     name: TarotTest
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${test.container.postgresql.jdbc.url}
-    username: postgres
-    password: postgres
-  flyway:
-    url: ${spring.datasource.url}
-    schemas: public
-    user: postgres
-    password: postgres
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: ${test.container.postgresql.jdbc.url}
+#    username: postgres
+#    password: postgres
+#  flyway:
+#    url: ${spring.datasource.url}
+#    schemas: public
+#    user: postgres
+#    password: postgres
   kafka:
     bootstrap-servers: ${test.container.kafka.bootstrap.servers}
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: tarot
+      username: root
+      password: mongopw
+      authentication-database: admin
 
 kafka:
   prefix: astana

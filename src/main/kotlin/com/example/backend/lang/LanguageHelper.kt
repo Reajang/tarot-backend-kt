@@ -1,6 +1,6 @@
 package com.example.backend.lang
 
-import com.example.backend.utils.LANGUAGE_SERVICE_LOGGER
+import com.example.backend.utils.LOGGER
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.ObjectUtils
 import org.apache.commons.lang3.StringUtils
@@ -14,10 +14,8 @@ import java.net.http.HttpResponse
 import java.util.*
 
 enum class Language(val code: String) {
-
     EN("en"),
     RU("ru")
-
 }
 
 @Component
@@ -28,25 +26,27 @@ class YandexTranslateHelper(
 
     @Value("\${yandex.api.translate.url}")
     private lateinit var _url: String
+
     @Value("\${yandex.api.translate.auth.type}")
     private lateinit var _authType: String
+
     @Value("\${yandex.api.translate.auth.apikey}")
     private lateinit var _apiKey: String
 
     fun translate(textToTranslate: String?, sourceLanguage: Language, targetLanguage: Language): String {
-        LANGUAGE_SERVICE_LOGGER.info("Start translation via Yandex API test={}\nfrom={}\nto={}",
-            if (textToTranslate!!.length > 50) textToTranslate.substring(0, 50) + "..." else textToTranslate,
-            sourceLanguage.code,
-            targetLanguage.code
-            )
+        LOGGER.info {
+            "Start translation via Yandex API test=${
+                if (textToTranslate!!.length > 50) textToTranslate.substring(0, 50) + "..." else textToTranslate
+            }\nfrom=${sourceLanguage.code}\nto=${targetLanguage.code}"
+        }
 
-        val httpRequest = prepareHttpRequest(textToTranslate, sourceLanguage, targetLanguage)
+        val httpRequest = prepareHttpRequest(textToTranslate!!, sourceLanguage, targetLanguage)
 
         val httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
 
         val jsonNode = objectMapper.readTree(httpResponse.body())
 
-        LANGUAGE_SERVICE_LOGGER.info("Response from Yandex API: {}", jsonNode)
+        LOGGER.info { "Response from Yandex API: $jsonNode" }
 
         val firstTranslation = jsonNode["translations"][0]
         return deleteYandexSystemParentheses(firstTranslation["text"].asText())
@@ -54,7 +54,11 @@ class YandexTranslateHelper(
     }
 
     @Throws(URISyntaxException::class)
-    private fun prepareHttpRequest(textToTranslate: String, sourceLanguage: Language, targetLanguage: Language): HttpRequest {
+    private fun prepareHttpRequest(
+        textToTranslate: String,
+        sourceLanguage: Language,
+        targetLanguage: Language
+    ): HttpRequest {
         return HttpRequest.newBuilder()
             .POST(HttpRequest.BodyPublishers.ofByteArray(prepareBody(textToTranslate, sourceLanguage, targetLanguage)))
             .uri(URI(_url))

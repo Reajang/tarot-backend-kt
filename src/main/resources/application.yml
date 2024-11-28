@@ -6,6 +6,10 @@ server:
     include-binding-errors: always
 
 spring:
+  webflux:
+    base-path: /api
+  main:
+    web-application-type: reactive
   application:
     name: Tarot soothsayer
 #  datasource:
@@ -53,6 +57,7 @@ spring:
       username: root
       password: mongopw
       authentication-database: admin
+      uuid-representation:  standard
 
 mongock:
   enabled: true
@@ -89,4 +94,5 @@ yandex:
 
 recreate:
   migration:
-    sql-to-json: true
+    re-init: false
+    sql-to-json: false

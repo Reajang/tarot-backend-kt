@@ -3,7 +3,7 @@ package com.example.backend.gpt
 import com.example.backend.dto.tarot.TarotCardDto
 import com.example.backend.dto.tarot.TarotRequest
 import com.example.backend.dto.tarot.TarotResponse
-import com.example.backend.utils.CHAT_GPT_SERVICE_LOGGER
+import com.example.backend.utils.LOGGER
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.StringUtils
@@ -49,15 +49,15 @@ class ChatGPTService(
     private lateinit var _temperature: String
 
     fun tarotMeChatGPT(request: TarotRequest): TarotResponse {
-        CHAT_GPT_SERVICE_LOGGER.info("Send tarot request to ChatGPT")
+        LOGGER.info("Send tarot request to ChatGPT")
         val httpRequest = prepareHttpRequest(request)
         val httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
-        CHAT_GPT_SERVICE_LOGGER.info("Waiting for responses...")
+        LOGGER.info("Waiting for responses...")
 
         //Бывает клиент возвращает ошибки
         val responseBody = objectMapper.readTree(httpResponse.body())
-        CHAT_GPT_SERVICE_LOGGER.info("ChatGPT response: {}", responseBody)
-        CHAT_GPT_SERVICE_LOGGER.info("Try to find choices.message.content in response")
+        LOGGER.info("ChatGPT response: {}", responseBody)
+        LOGGER.info("Try to find choices.message.content in response")
 
         val gptResponse = responseBody["choices"].asSequence()
             .filter { obj: JsonNode? ->

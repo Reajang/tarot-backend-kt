@@ -12,6 +12,8 @@ import com.example.backend.repos.TarotCardRepository
 import lombok.AllArgsConstructor
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.util.*
 
 @Service
@@ -27,7 +29,7 @@ class TarotServiceChatGPTImpl(
     private val randomizer = Random(31)
 
     @Transactional(readOnly = true)
-    override fun getAllCards(): List<TarotCardDto?> {
+    override fun getAllCards(): Flux<TarotCardDto?> {
         return repository.findAll()
             .map { card: TarotCard? ->
                 tarotMapper.map(card, randomizer.nextBoolean())
@@ -35,23 +37,14 @@ class TarotServiceChatGPTImpl(
     }
 
     @Transactional
-    override fun ask(request: TarotRequest?): TarotResponse? {
-        return tarotHelper.futureTell(request!!)
+    override fun ask(request: TarotRequest?): Mono<TarotResponse?> {
+        return Mono.just(tarotHelper.futureTell(request!!))
     }
 
-    override fun askAsync(request: TarotRequest?): UUID? {
-        val jobId = jobService.createNew(JobType.TAROT_FUTURE_TELL)
-        tarotPublisher.publishTarotPredictionRequestEvent(request, jobId)
-        return jobId
-    }
-
-    @Transactional(readOnly = true)
-    override fun randomOne(): TarotCardDto? {
-        // TODO there is no ability to updates cards. It's better so store it in the memory and do not call repository everytime
-        val tarotCards = repository.findAll()
-        val cardIndex = randomizer.nextInt(tarotCards.size)
-        val isCardReversed = randomizer.nextBoolean()
-        return tarotMapper.map(tarotCards[cardIndex], isCardReversed)
-
+    @Transactional
+    override fun askAsync(request: TarotRequest?): Mono<UUID?> {
+        return jobService.createNew(JobType.TAROT_FUTURE_TELL)
+            .map { it?.id }
+            .doOnNext { tarotPublisher.publishTarotPredictionRequestEvent(request, it!!) }
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class DbMigrationProps {
 
-    @Value("\${recreate.migration.sql-to-json:true}")
+    @Value("\${recreate.migration.sql-to-json:false}")
     val recreateJsonMigrationInitFile: Boolean? = null
 
     @Value("classpath:db/migration/V1.1__tarot_initial.sql")

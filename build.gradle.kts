@@ -13,7 +13,7 @@ object DepVersions {
     const val MAPSTRUCT = "1.5.5.Final"
     const val LOMBOK = "1.18.32"
     const val FLYWAY = "10.17.0"
-    const val MONGOCK = "5.2.4"
+    const val MONGOCK = "5.5.0"
     const val KAFKA_SPRING = "3.2.4"
     const val KAFKA_CLIENTS = "3.7.0"
 
@@ -73,11 +73,9 @@ repositories {
     mavenCentral()
 }
 
-//configurations {
-//    compileOnly {
-//        extendsFrom annotationProcessor
-//    }
-//}
+configurations {
+//    compile.exclude module: 'spring-boot-starter-reactor-netty'
+}
 
 
 dependencies {
@@ -86,17 +84,25 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:${DepVersions.KOTLIN_LOGGING}")
 
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa:${DepVersions.SPRING_BOOT}")
-    implementation("org.springframework.boot:spring-boot-starter-data-rest:${DepVersions.SPRING_BOOT}")
-    implementation("org.springframework.boot:spring-boot-starter-aop:${DepVersions.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:${DepVersions.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter-reactor-netty:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-data-rest:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-aop:${DepVersions.SPRING_BOOT}")
 //    implementation("org.springframework.boot:spring-boot-starter-security:${DepVersions.SPRING_BOOT}")
-    implementation("org.springframework.boot:spring-boot-starter-web:${DepVersions.SPRING_BOOT}")
-    implementation("org.springframework.boot:spring-boot-starter-actuator:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-web:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-actuator:${DepVersions.SPRING_BOOT}")
+//    compileOnly ("org.springframework.boot:spring-boot-devtools:${DepVersions.SPRING_BOOT}")
+
 
     implementation("org.flywaydb:flyway-core:${DepVersions.FLYWAY}")
 
     implementation("io.mongock:mongock-springboot:${DepVersions.MONGOCK}")
-    implementation("io.mongock:mongock-springboot-v3:${DepVersions.MONGOCK}")
-    implementation("io.mongock:mongodb-springdata-v4-driver:${DepVersions.MONGOCK}")
+    implementation("io.mongock:mongock-springboot:${DepVersions.MONGOCK}")
+//    implementation("io.mongock:mongock-springboot-v3:${DepVersions.MONGOCK}")
+//    implementation("io.mongock:mongodb-springdata-v4-driver:${DepVersions.MONGOCK}")
+    implementation("io.mongock:mongodb-reactive-driver:${DepVersions.MONGOCK}")
+//    implementation("org.mongodb:mongodb-driver-reactivestreams:5.2.0")
+
 
     implementation("org.mapstruct:mapstruct:${DepVersions.MAPSTRUCT}")
 
@@ -108,7 +114,6 @@ dependencies {
 
 
     compileOnly("org.projectlombok:lombok:${DepVersions.LOMBOK}")
-    compileOnly ("org.springframework.boot:spring-boot-devtools:${DepVersions.SPRING_BOOT}")
 
     runtimeOnly("org.postgresql:postgresql:${DepVersions.POSTGRES}")
 
@@ -127,12 +132,13 @@ dependencies {
     testImplementation("org.springframework.kafka:spring-kafka-test:${DepVersions.KAFKA_SPRING}")
     testImplementation("org.mockito:mockito-junit-jupiter:${DepVersions.MOCKITO_JUNIT_JUPITER}")
 
-//    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${DepVersions.SPRING_BOOT}")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:${DepVersions.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:${DepVersions.SPRING_BOOT}")
 
 //    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:${DepVersions.SPRING_BOOT}")
 //    implementation("org.springframework.boot:spring-boot-starter-graphql:${DepVersions.SPRING_BOOT}")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:${DepVersions.SPRING_BOOT}")
+
+//    compileOnly("org.springframework.boot:spring-boot-starter-reactor-netty:${DepVersions.SPRING_BOOT}")
 //    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 //    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 //    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")

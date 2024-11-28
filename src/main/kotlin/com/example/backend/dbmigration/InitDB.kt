@@ -5,12 +5,13 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mongock.api.annotations.*
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate
+import org.springframework.stereotype.Component
 
-@Configuration
-@ChangeUnit(order = "001", id = "cards_init", author = "leonid")
+@Component
+//@ChangeUnit(order = "001", id = "cards_init", author = "leonid")
 class InitDB(
-    private val mongoTemplate: MongoTemplate,
+    private val mongoTemplate: ReactiveMongoTemplate,
     private val objectMapper: ObjectMapper,
     private val dbMigrationProps: DbMigrationProps,
     private val migrationHelper: MigrationHelper,
@@ -35,7 +36,7 @@ class InitDB(
             object : TypeReference<List<TarotCard?>?>() {
             }
         )
-        mongoTemplate.insertAll(tarotCards!!)
+        mongoTemplate.insertAll(tarotCards!!).subscribe()
     }
 
     @RollbackExecution

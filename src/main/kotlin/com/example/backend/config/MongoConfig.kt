@@ -1,35 +1,48 @@
 package com.example.backend.config
 
-//import com.mongodb.reactivestreams.client.MongoClient
-//import com.mongodb.reactivestreams.client.MongoClients
-//import org.springframework.boot.CommandLineRunner
-//import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-//import org.springframework.context.annotation.Bean
-import io.mongock.runner.springboot.EnableMongock
-import org.springframework.context.annotation.Configuration
-//import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration
-//import org.springframework.data.mongodb.core.ReactiveMongoTemplate
+import com.example.backend.repos.JobRepository
+import com.example.backend.repos.TarotCardRepository
+import com.mongodb.reactivestreams.client.MongoClient
+import com.mongodb.reactivestreams.client.MongoClients
+import io.mongock.api.config.MongockConfiguration
+import io.mongock.driver.mongodb.reactive.driver.MongoReactiveDriver
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
+import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 
-@Configuration
-//@EnableMongoRepositories
-@EnableMongock
-class MongoConfig
-//    : AbstractReactiveMongoConfiguration()
-{
+@EnableReactiveMongoRepositories(
+    basePackageClasses = [
+        JobRepository::class,
+        TarotCardRepository::class,
+    ]
+)
+//@EnableMongock
+class MongoConfig : AbstractReactiveMongoConfiguration() {
 
+    override fun getDatabaseName() = "tarot"
 
-//    override fun getDatabaseName(): String {
-//        return "tarot"
-//    }
-//
-//    @Bean
-//    override fun reactiveMongoClient(): MongoClient {
-//        return MongoClients.create("mongodb://root:mongopw@localhost:27017")
-//    }
-//
-//    @Bean
-//    fun reactiveMongoTemplate(): ReactiveMongoTemplate {
-//        return ReactiveMongoTemplate(reactiveMongoClient(), databaseName)
-//    }
+    @Bean
+    override fun reactiveMongoClient() = MongoClients.create()
 
+    @Bean
+    fun reactiveMongoTemplate(): ReactiveMongoTemplate {
+        return ReactiveMongoTemplate(reactiveMongoClient(), databaseName)
+    }
+
+    @Bean
+    fun connectionDriver(
+        @Value("\${spring.data.mongodb.database}") database: String,
+        config: MongockConfiguration,
+        client: MongoClient,
+    ): MongoReactiveDriver {
+        val driver = MongoReactiveDriver.withLockStrategy(
+            client, database,
+            config.lockAcquiredForMillis,
+            config.lockQuitTryingAfterMillis,
+            config.lockTryFrequencyMillis
+        )
+        return driver
+    }
 }

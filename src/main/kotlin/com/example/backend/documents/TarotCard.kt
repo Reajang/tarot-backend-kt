@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
 @Document
-class TarotCard(
+data class TarotCard(
     @Id
     var id: UUID? = null,
     var cardType: TarotCardType? = null,

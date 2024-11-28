@@ -43,7 +43,7 @@ class TarotListener(
         try {
             val tarotResponse = tarotHelper.futureTell(tarotRequest!!)
             jobPublisher.publishUpdateJobStatusEvent(event.jobId, JobStatus.COMPLETE, listOf(tarotResponse))
-            //            tarotPublisher.publishTarotPredictionResponseEvent(tarotResponse, jobId);
+//                        tarotPublisher.publishTarotPredictionResponseEvent(tarotResponse, jobId);
         } catch (e: Exception) {
             LOGGER.error { "Error while async future telling for jobId=$jobId, TarotRequest=$tarotRequest" }
             LOGGER.error { "Error: $e" }

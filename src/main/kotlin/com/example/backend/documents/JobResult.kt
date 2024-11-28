@@ -3,7 +3,7 @@ package com.example.backend.documents
 import java.time.Instant
 import java.util.*
 
-class JobResult(
+data class JobResult(
     var id: UUID? = null,
     var createDate: Instant? = null,
     var data: String? = null,

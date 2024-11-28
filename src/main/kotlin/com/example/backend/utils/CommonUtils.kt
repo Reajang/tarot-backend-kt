@@ -12,9 +12,7 @@ import org.slf4j.LoggerFactory
 import java.time.Instant
 import java.util.*
 
-val CHAT_GPT_SERVICE_LOGGER: Logger = LoggerFactory.getLogger(ChatGPTService::class.java)
 val LANGUAGE_SERVICE_LOGGER: Logger = LoggerFactory.getLogger(YandexTranslateHelper::class.java)
-val TAROT_SERVICE_LOGGER: Logger = LoggerFactory.getLogger(TarotHelper::class.java)
 
 val LOGGER = KotlinLogging.logger {}
 

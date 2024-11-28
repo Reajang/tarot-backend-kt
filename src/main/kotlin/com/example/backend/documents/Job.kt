@@ -7,7 +7,7 @@ import java.util.*
 
 
 @Document
-class Job(
+data class Job(
     @Id
     var id: UUID? = null,
     var createDate: Instant? = null,
@@ -15,5 +15,4 @@ class Job(
     var type: JobType? = null,
     var status: JobStatus? = null,
     var results: MutableList<JobResult>? = null
-) {
-}
+)
