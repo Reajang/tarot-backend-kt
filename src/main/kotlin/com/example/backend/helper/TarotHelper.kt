@@ -7,7 +7,7 @@ import com.example.backend.lang.Language
 import com.example.backend.lang.YandexTranslateHelper
 import com.example.backend.utils.LOGGER
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.Mono
 
 @Component
 class TarotHelper(
@@ -15,31 +15,39 @@ class TarotHelper(
     val yandexTranslateHelper: YandexTranslateHelper
 ) {
 
-    @Transactional
-    fun futureTell(request: TarotRequest): TarotResponse {
+    fun futureTell(request: TarotRequest): Mono<TarotResponse?> {
         LOGGER.info { "Try get prediction" }
         val translatedInEngRequest = translateRequestIfNecessary(request)
-        val tarotResponse: TarotResponse = chatGPTService.tarotMeChatGPT(translatedInEngRequest)
-        LOGGER.info { "Successfully got tarot prediction" }
+        val tarotResponse: Mono<TarotResponse?> = chatGPTService.tarotMeChatGPT(translatedInEngRequest)
         val translatedResponse = translateResponseIfNecessary(request, tarotResponse)
         return translatedResponse
     }
 
-    private fun translateRequestIfNecessary(request: TarotRequest): TarotRequest {
-        if (request.from != Language.EN) {
-            LOGGER.info { "Tarot request should be translated from=${request.from} to=${request.to}" }
-            val questionInEnglish = yandexTranslateHelper.translate(request.text, request.from!!, request.to!!)
-            return TarotRequest(request.cards, questionInEnglish, request.from, request.to)
-        }
-        return request
-    }
-
-    private fun translateResponseIfNecessary(request: TarotRequest, tarotResponse: TarotResponse): TarotResponse {
+    private fun translateResponseIfNecessary(
+        request: TarotRequest,
+        tarotResponse: Mono<TarotResponse?>
+    ): Mono<TarotResponse?> {
         if (request.from != Language.EN) {
             LOGGER.info { "Tarot response should be translated back from=${request.to} to=${request.from}" }
-            val responseInEnglish = yandexTranslateHelper.translate(tarotResponse.text, request.to!!, request.from!!)
-            return TarotResponse(tarotResponse.cards, responseInEnglish, request.to, request.from)
+
+            return tarotResponse.flatMap { response ->
+                yandexTranslateHelper.translate(response?.text!!, request.to!!, request.from!!)
+                    .map { translatedText ->
+                        TarotResponse(response.cards, translatedText)
+                    }
+            }
         }
         return tarotResponse
+    }
+
+    private fun translateRequestIfNecessary(request: TarotRequest): Mono<TarotRequest> {
+        if (request.from != Language.EN) {
+            LOGGER.info { "Tarot request should be translated from=${request.from} to=${request.to}" }
+            return yandexTranslateHelper.translate(request.text!!, request.from!!, request.to!!)
+                .map { translatedQuestion ->
+                    TarotRequest(request.cards, translatedQuestion, request.from, request.to)
+                }
+        }
+        return Mono.just(request)
     }
 }

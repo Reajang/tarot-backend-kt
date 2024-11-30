@@ -9,10 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 import java.util.*
 
 
@@ -26,7 +24,6 @@ const val TAROT_DEFAULT_TEMPLATE_LONG = "Hi, GPT. Tell me the TAROT." +
 
 @Component
 class ChatGPTService(
-    val httpClient: HttpClient,
     val objectMapper: ObjectMapper
 ) {
 
@@ -48,47 +45,41 @@ class ChatGPTService(
     @Value("\${gpt.api.temperature}")
     private lateinit var _temperature: String
 
-    fun tarotMeChatGPT(request: TarotRequest): TarotResponse {
-        LOGGER.info("Send tarot request to ChatGPT")
-        val httpRequest = prepareHttpRequest(request)
-        val httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
-        LOGGER.info("Waiting for responses...")
+    private lateinit var webClient: WebClient
 
-        //Бывает клиент возвращает ошибки
-        val responseBody = objectMapper.readTree(httpResponse.body())
-        LOGGER.info("ChatGPT response: {}", responseBody)
-        LOGGER.info("Try to find choices.message.content in response")
+    fun tarotMeChatGPT(request: Mono<TarotRequest>): Mono<TarotResponse?> {
+        LOGGER.info { "Send tarot request to ChatGPT" }
 
-        val gptResponse = responseBody["choices"].asSequence()
-            .filter { obj: JsonNode? ->
-                Objects.nonNull(
-                    obj
-                )
-            }
-            //            .map(jsonNode -> jsonNode.get("text").asText())
-            .map { jsonNode: JsonNode ->
-                jsonNode["message"]["content"].asText()
-            }
-            .filter { cs: String? -> StringUtils.isNotBlank(cs) }
-            .map { answer: String ->
-                answer.replace(
-                    SPECIAL_SYMBOLS_TO_EXCLUDE_REGEX,
-                    StringUtils.EMPTY
-                )
-            }
-            .joinToString("\n")
-        return TarotResponse(request.cards!!, gptResponse)
-    }
-
-    private fun prepareHttpRequest(request: TarotRequest): HttpRequest {
-        return HttpRequest.newBuilder()
-            .POST(HttpRequest.BodyPublishers.ofByteArray(prepareBody(request)))
-            .uri(URI(_url))
-            .headers(
-                "Content-Type", "application/json",
-                "Authorization", _authType + StringUtils.SPACE + _bearer
-            )
-            .build()
+        return request.flatMap { req ->
+            getWebClient().post()
+                .bodyValue(prepareBody(req))
+                .header("Content-Type", "application/json")
+                .header("Authorization", _authType + StringUtils.SPACE + _bearer)
+                .retrieve()
+                .bodyToMono(JsonNode::class.java)
+                .map { responseBody ->
+                    LOGGER.info { "ChatGPT response: $responseBody" }
+                    val gptResponse = responseBody["choices"].asSequence()
+                        .filter { obj: JsonNode? ->
+                            Objects.nonNull(
+                                obj
+                            )
+                        }
+                        //            .map(jsonNode -> jsonNode.get("text").asText())
+                        .map { jsonNode: JsonNode ->
+                            jsonNode["message"]["content"].asText()
+                        }
+                        .filter { cs: String? -> StringUtils.isNotBlank(cs) }
+                        .map { answer: String ->
+                            answer.replace(
+                                SPECIAL_SYMBOLS_TO_EXCLUDE_REGEX,
+                                StringUtils.EMPTY
+                            )
+                        }
+                        .joinToString("\n")
+                    TarotResponse(req.cards!!, gptResponse)
+                }
+        }
     }
 
     private fun prepareBody(request: TarotRequest): ByteArray {
@@ -109,6 +100,13 @@ class ChatGPTService(
             ?.map { card: TarotCardDto? -> if (card?.reversed!!) card.name + " (reversed)" else card.name }
             ?.joinToString(", ")
         return String.format(TAROT_DEFAULT_TEMPLATE_LONG, request.text, cards)
+    }
+
+    private fun getWebClient(): WebClient {
+        if (!this::webClient.isInitialized) {
+            webClient = WebClient.create(_url)
+        }
+        return webClient
     }
 }
 

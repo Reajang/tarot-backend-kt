@@ -17,7 +17,7 @@ class JobMapperTest {
     private var jobMapper: JobMapper = JobMapperImpl()
 
     @Test
-    fun mapToDtoTest() {
+    fun `map ToDtoTest`() {
         val job = Job(
             UUID.randomUUID(),
             Instant.now(),

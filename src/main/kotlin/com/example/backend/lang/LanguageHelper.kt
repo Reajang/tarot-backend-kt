@@ -1,17 +1,14 @@
 package com.example.backend.lang
 
 import com.example.backend.utils.LOGGER
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.ObjectUtils
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.net.URI
-import java.net.URISyntaxException
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.util.*
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 enum class Language(val code: String) {
     EN("en"),
@@ -20,7 +17,6 @@ enum class Language(val code: String) {
 
 @Component
 class YandexTranslateHelper(
-    val httpClient: HttpClient,
     val objectMapper: ObjectMapper
 ) {
 
@@ -33,43 +29,30 @@ class YandexTranslateHelper(
     @Value("\${yandex.api.translate.auth.apikey}")
     private lateinit var _apiKey: String
 
-    fun translate(textToTranslate: String?, sourceLanguage: Language, targetLanguage: Language): String {
+    private lateinit var webClient: WebClient
+
+    fun translate(textToTranslate: String, sourceLanguage: Language, targetLanguage: Language): Mono<String> {
         LOGGER.info {
             "Start translation via Yandex API test=${
-                if (textToTranslate!!.length > 50) textToTranslate.substring(0, 50) + "..." else textToTranslate
+                if (textToTranslate.length > 50) textToTranslate.substring(0, 50) + "..." else textToTranslate
             }\nfrom=${sourceLanguage.code}\nto=${targetLanguage.code}"
         }
 
-        val httpRequest = prepareHttpRequest(textToTranslate!!, sourceLanguage, targetLanguage)
+        return getWebClient().post()
+            .bodyValue(prepareBody(textToTranslate, sourceLanguage, targetLanguage))
+            .header("Content-Type", "application/json")
+            .header("Authorization", _authType + StringUtils.SPACE + _apiKey)
+            .retrieve()
+            .bodyToMono(JsonNode::class.java)
+            .map { jsonNode ->
+                LOGGER.info { "Response from Yandex API: $jsonNode" }
 
-        val httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString())
-
-        val jsonNode = objectMapper.readTree(httpResponse.body())
-
-        LOGGER.info { "Response from Yandex API: $jsonNode" }
-
-        val firstTranslation = jsonNode["translations"][0]
-        return deleteYandexSystemParentheses(firstTranslation["text"].asText())
-
+                val firstTranslation = jsonNode["translations"][0]
+                deleteYandexSystemParentheses(firstTranslation["text"].asText())
+            }
     }
 
-    @Throws(URISyntaxException::class)
-    private fun prepareHttpRequest(
-        textToTranslate: String,
-        sourceLanguage: Language,
-        targetLanguage: Language
-    ): HttpRequest {
-        return HttpRequest.newBuilder()
-            .POST(HttpRequest.BodyPublishers.ofByteArray(prepareBody(textToTranslate, sourceLanguage, targetLanguage)))
-            .uri(URI(_url))
-            .headers(
-                "Content-Type", "application/json",
-                "Authorization", _authType + StringUtils.SPACE + _apiKey
-            )
-            .build()
-    }
-
-    private fun prepareBody(textToTranslate: String, sourceLanguage: Language, targetLanguage: Language): ByteArray? {
+    private fun prepareBody(textToTranslate: String, sourceLanguage: Language, targetLanguage: Language): ByteArray {
         val objectNode = objectMapper.createObjectNode()
         val texts = arrayOf(ObjectUtils.defaultIfNull(textToTranslate, StringUtils.EMPTY))
         objectNode.put("sourceLanguageCode", sourceLanguage.code)
@@ -97,5 +80,12 @@ class YandexTranslateHelper(
             startIndex,
             endIndex
         ) else translateResponseWithinParentheses
+    }
+
+    private fun getWebClient(): WebClient {
+        if (!this::webClient.isInitialized) {
+            webClient = WebClient.create(_url)
+        }
+        return webClient
     }
 }

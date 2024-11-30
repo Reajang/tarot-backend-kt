@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.reactive.config.EnableWebFlux
 import java.net.http.HttpClient
 import java.time.Duration
 
+@EnableWebFlux
 @Configuration
 class CommonComponentsConfig {
 
@@ -20,7 +22,7 @@ class CommonComponentsConfig {
     }
 
     @Bean
-    fun commonHttpClient(): HttpClient {
+    fun simpleHttpClient(): HttpClient {
         return HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .followRedirects(HttpClient.Redirect.NORMAL)

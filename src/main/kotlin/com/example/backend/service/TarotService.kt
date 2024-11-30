@@ -5,13 +5,10 @@ import com.example.backend.dto.tarot.TarotRequest
 import com.example.backend.dto.tarot.TarotResponse
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.util.UUID
 
 interface TarotService {
 
     fun getAllCards(): Flux<TarotCardDto?>
 
     fun ask(request: TarotRequest?): Mono<TarotResponse?>
-
-    fun askAsync(request: TarotRequest?): Mono<UUID?>
 }
