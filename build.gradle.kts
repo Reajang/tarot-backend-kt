@@ -81,6 +81,8 @@ configurations {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${DepVersions.KOTLIN_COROUTINES}")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${DepVersions.KOTLIN}")
+//    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:${DepVersions.KOTLIN}")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${DepVersions.KOTLIN}")
     implementation("io.github.microutils:kotlin-logging-jvm:${DepVersions.KOTLIN_LOGGING}")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${DepVersions.KOTLIN_LOGGING}")
 
@@ -88,6 +90,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-reactor-netty:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${DepVersions.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter-websocket:${DepVersions.SPRING_BOOT}")
 
 //    implementation("org.springframework.boot:spring-boot-starter-data-rest:${DepVersions.SPRING_BOOT}")
 //    implementation("org.springframework.boot:spring-boot-starter-aop:${DepVersions.SPRING_BOOT}")
@@ -140,8 +143,7 @@ dependencies {
 //    implementation("org.springframework.boot:spring-boot-starter-graphql:${DepVersions.SPRING_BOOT}")
 
 //    compileOnly("org.springframework.boot:spring-boot-starter-reactor-netty:${DepVersions.SPRING_BOOT}")
-//    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
 //    }
 //        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
 //    testImplementation("org.springframework.boot:spring-boot-starter-test") {
