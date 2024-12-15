@@ -91,6 +91,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-reactor-netty:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${DepVersions.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-websocket:${DepVersions.SPRING_BOOT}")
+//    implementation("org.springframework.boot:spring-boot-starter-integration:${DepVersions.SPRING_BOOT}")
 
 //    implementation("org.springframework.boot:spring-boot-starter-data-rest:${DepVersions.SPRING_BOOT}")
 //    implementation("org.springframework.boot:spring-boot-starter-aop:${DepVersions.SPRING_BOOT}")

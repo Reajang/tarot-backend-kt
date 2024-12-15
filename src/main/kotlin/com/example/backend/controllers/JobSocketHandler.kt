@@ -5,8 +5,11 @@ import com.example.backend.repos.JobRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketHandler
+import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.util.*
 
 @Component
 class JobSocketHandler(
@@ -16,22 +19,22 @@ class JobSocketHandler(
 
     override fun handle(session: WebSocketSession): Mono<Void> {
 
-        val input = session.receive()
-            .map {objectMapper.readValue(it.payloadAsText, Job::class.java)}
-            .doOnNext{
-                var newJob: Job = it
-                newJob.id = null
-                jobRepository.save(newJob)
+        val responseOnInput = session.receive()
+            .map { objectMapper.readValue(it.payloadAsText, Job::class.java) }
+            .flatMap {
+                it.id = UUID.randomUUID()
+                jobRepository.save(it)
             }
-            .then()
 
-        val response = jobRepository.findAll()
+        val defaultResponse = jobRepository.findAll()
+
+        //The essential difference between merge and concat is that in merge, both streams are live.
+        // In case of concat, first stream is terminated and then the other stream is concatenated to it
+        val resultResponse: Flux<WebSocketMessage> = defaultResponse.concatWith(responseOnInput)
             .map { objectMapper.writeValueAsString(it) }
+            .map { session.textMessage(it) }
 
-
-        val output = session.send(response.map(session::textMessage))
-
-        return Mono.zip(input, output).then()
+        return session.send(resultResponse)
     }
 
 }
